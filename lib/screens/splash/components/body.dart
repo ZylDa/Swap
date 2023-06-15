@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swap/components/default_button.dart';
+import 'package:swap/pages/auth_page.dart';
 import 'package:swap/screens/splash/components/splash_content.dart';
 
 import '../../../constants.dart';
@@ -59,8 +60,11 @@ class _BodyState extends State<Body> {
                   DefaultButton(
                     text: getButtonText(),
                     onpressed: () {
-                      var LoginScreen;
-                      Navigator.pushNamed(context, LoginScreen.routeName);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AuthPage()),
+                      );
                     }, //onpressed: () {},
                   ),
                 ],

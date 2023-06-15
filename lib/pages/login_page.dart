@@ -55,7 +55,6 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       );
-
       //pop the loading circle
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
@@ -64,11 +63,6 @@ class _LoginPageState extends State<LoginPage> {
       //show error message
       showErrorMessage(e.code);
     }
-
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text,
-      password: passwordController.text,
-    );
   }
 
   @override
@@ -81,15 +75,18 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 50),
+                const SizedBox(height: 10),
 
                 // logo
-                const Icon(
-                  Icons.login,
-                  size: 100,
+                Image.asset(
+                  'assets/images/logopng.png',
+                  height: 300,
+                  width: 300,
+                  alignment: Alignment.center,
+                  fit: BoxFit.cover,
                 ),
 
-                const SizedBox(height: 50),
+                const SizedBox(height: 25),
 
                 // welcome back, you've been missed!
                 Text(
@@ -105,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                 // email textfield
                 MyTextField(
                   controller: emailController,
-                  hintText: 'Username',
+                  hintText: 'NCCU E-mail',
                   obscureText: false,
                 ),
 

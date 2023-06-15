@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:swap/screens/splash/splash_screen.dart';
+
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
@@ -25,6 +27,16 @@ class HomePage extends StatelessWidget {
             Text(
               'Logged in as: ' + user.email!,
               style: const TextStyle(fontSize: 20),
+            ),
+            //Go to splash_screen
+            ElevatedButton(
+              child: const Text('Check out guidelines'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SplashScreen()),
+                );
+              },
             ),
           ],
         ),

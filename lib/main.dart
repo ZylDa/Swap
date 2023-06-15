@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       //debugShowCheckedModeBanner: false,
       title: 'Swap Demo',
-
       home: AuthPage(),
       //initialRoute: SplashScreen.routeName,
       //routes: routes,

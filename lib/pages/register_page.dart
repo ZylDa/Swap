@@ -61,7 +61,6 @@ class _RegisterPageState extends State<RegisterPage> {
       } else {
         showErrorMessage('Passwords do not match!');
       }
-
       //pop the loading circle
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
@@ -70,11 +69,6 @@ class _RegisterPageState extends State<RegisterPage> {
       //show error message
       showErrorMessage(e.code);
     }
-
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text,
-      password: passwordController.text,
-    );
   }
 
   @override
@@ -87,12 +81,15 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 25),
+                const SizedBox(height: 15),
 
                 // logo
-                const Icon(
-                  Icons.login,
-                  size: 50,
+                Image.asset(
+                  'assets/images/logopng.png',
+                  height: 300,
+                  width: 300,
+                  alignment: Alignment.center,
+                  fit: BoxFit.cover,
                 ),
 
                 const SizedBox(height: 25),
@@ -111,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 // email textfield
                 MyTextField(
                   controller: emailController,
-                  hintText: 'Username',
+                  hintText: 'NCCU E-mail',
                   obscureText: false,
                 ),
 

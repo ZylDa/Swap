@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:swap/navigation.dart';
 
 import 'package:swap/screens/splash/splash_screen.dart';
 
@@ -35,6 +36,15 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SplashScreen()),
+                );
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Get Started'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Navigation()),
                 );
               },
             ),

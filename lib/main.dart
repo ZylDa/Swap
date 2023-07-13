@@ -22,11 +22,11 @@ class MyApp extends StatelessWidget {
         future: checkFirstTimeUser(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // 此时可以显示一个加载指示器或启动屏幕
+            // 此時可以顯示一個加載指示器或啟動屏幕
             return const CircularProgressIndicator();
           } else {
             if (snapshot.hasError) {
-              // 处理错误情况
+              // 處理錯誤情況
               return Text('Error: ${snapshot.error}');
             } else {
               bool isFirstTimeUser = snapshot.data ?? true;
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
     bool isFirstTime = prefs.getBool('isFirstTimeUser') ?? true;
 
     if (isFirstTime) {
-      // 如果是第一次使用应用程序，将isFirstTimeUser设置为false
+      // 如果是第一次使用應用程序，將isFirstTimeUser設置為false
       prefs.setBool('isFirstTimeUser', false);
     }
 

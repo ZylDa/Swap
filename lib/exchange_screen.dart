@@ -88,7 +88,7 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                       Radius.elliptical(91, 90),
                     ),
                     image: const DecorationImage(
-                        image: AssetImage('assets/images/Image2.png'),
+                        image: AssetImage('assets/images/curler.png'),
                         fit: BoxFit.fill),
                     border: Border.all(
                       color: Colors.white,

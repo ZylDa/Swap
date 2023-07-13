@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:swap/components/my_button.dart';
 import 'package:swap/components/my_textfield.dart';
-import 'package:swap/components/square_tile.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;

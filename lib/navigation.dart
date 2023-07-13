@@ -43,7 +43,7 @@ class _NavigationState extends State<Navigation> {
         Container(
           color: const Color.fromRGBO(12, 59, 46, 1),
           alignment: Alignment.center,
-          child: ImageInput(),
+          child: const ImageInput(),
         ),
         Container(
           color: const Color.fromRGBO(12, 59, 46, 1),

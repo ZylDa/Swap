@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '751352538134',
     projectId: 'swap-dfbde',
     storageBucket: 'swap-dfbde.appspot.com',
-    iosClientId: '751352538134-ds6gn6bhltmtnfkrhfll2edi1uuhbman.apps.googleusercontent.com',
+    iosClientId:
+        '751352538134-ds6gn6bhltmtnfkrhfll2edi1uuhbman.apps.googleusercontent.com',
     iosBundleId: 'com.example.swap',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '751352538134',
     projectId: 'swap-dfbde',
     storageBucket: 'swap-dfbde.appspot.com',
-    iosClientId: '751352538134-ds6gn6bhltmtnfkrhfll2edi1uuhbman.apps.googleusercontent.com',
+    iosClientId:
+        '751352538134-ds6gn6bhltmtnfkrhfll2edi1uuhbman.apps.googleusercontent.com',
     iosBundleId: 'com.example.swap',
   );
 }

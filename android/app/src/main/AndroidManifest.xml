@@ -1,7 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.swap">
-   <application
-        android:label="swap"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:label="swap_ios"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

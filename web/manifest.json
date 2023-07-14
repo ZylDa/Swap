@@ -1,6 +1,6 @@
 {
-    "name": "swap",
-    "short_name": "swap",
+    "name": "swap_ios",
+    "short_name": "swap_ios",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
           children: [
             const Text('Home Page'),
             Text(
-              'Logged in as: ' + user.email!,
+              'Logged in as: ${user.email!}',
               style: const TextStyle(fontSize: 20),
             ),
             //Go to splash_screen
@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SplashScreen()),
+                  MaterialPageRoute(builder: (context) => const SplashScreen()),
                 );
               },
             ),
@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Navigation()),
+                  MaterialPageRoute(builder: (context) => const Navigation()),
                 );
               },
             ),

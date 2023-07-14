@@ -3,11 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:swap/components/my_button.dart';
 import 'package:swap/components/my_textfield.dart';
-import 'package:swap/components/square_tile.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  RegisterPage({super.key, required this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();

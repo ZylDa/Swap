@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mongo_dart/mongo_dart.dart' hide Center, State;
 
 import 'package:swap/components/my_button.dart';
 import 'package:swap/components/my_textfield.dart';
+import 'package:swap/navigation.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
-  // sign user in method
-  void signUserIn() async {
-    //show loading circle
+  // 显示加载指示器对话框
+  void showLoadingDialog() {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -29,7 +30,11 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
     );
+  }
 
+  // sign user up method
+  Future<bool> register(String mail, String password, String cpassword) async {
+    showLoadingDialog();
     //error message to user
     void showErrorMessage(String message) {
       showDialog(
@@ -48,19 +53,38 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
 
-    //try sign in
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-      //pop the loading circle
+    final db = await Db.create(
+        'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/test?retryWrites=true&w=majority');
+    await db.open();
+
+    final users = db.collection('users');
+    bool isValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(mail);
+    if (isValid == true) {
+      if (password == cpassword) {
+        try {
+          await users.insert({'email': mail, 'password': password});
+          await db.close();
+          Navigator.pop(context);
+          return true; // 注册成功，返回 true
+        } catch (e) {
+          await db.close();
+          Navigator.pop(context);
+          showErrorMessage('Failed to register');
+          return false; // 注册失败，返回 false
+        }
+      } else {
+        await db.close();
+        Navigator.pop(context);
+        showErrorMessage('Passwords do not match');
+        return false; // 密码不匹配，返回 false
+      }
+    } else {
+      await db.close();
       Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      //pop the loading circle
-      Navigator.pop(context);
-      //show error message
-      showErrorMessage(e.code);
+      showErrorMessage('Invalid email format');
+      return false; // 邮箱格式不正确，返回 false
     }
   }
 
@@ -74,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
 
                 // logo
                 Image.asset(
@@ -87,9 +111,9 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 25),
 
-                // welcome back, you've been missed!
+                // Create an account for free!
                 Text(
-                  'Welcome back you\'ve been missed!',
+                  'Create an account for free!',
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 16,
@@ -116,27 +140,33 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 10),
 
-                // forgot password?
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
+                // confirm password textfield
+                MyTextField(
+                  controller: confirmPasswordController,
+                  hintText: 'Confirm Password',
+                  obscureText: true,
                 ),
 
-                const SizedBox(height: 25),
+                const SizedBox(height: 20),
 
-                // sign in button
+                // sign up button
                 MyButton(
-                  text: 'Sign In',
-                  onTap: signUserIn,
-                ),
+                    text: 'Sign Up',
+                    onTap: () async {
+                      bool registerResult = await register(
+                          emailController.text,
+                          passwordController.text,
+                          confirmPasswordController.text);
+                      if (registerResult) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Navigation()),
+                        );
+                      } else {
+                        print('Registration failed');
+                      }
+                    }),
 
                 const SizedBox(height: 50),
                 /*
@@ -192,14 +222,14 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a member?',
+                      'Already have an account?',
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: const Text(
-                        'Register now',
+                        'Login now',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,

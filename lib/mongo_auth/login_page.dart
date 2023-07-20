@@ -1,26 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mongo_dart/mongo_dart.dart' hide Center, State;
 
 import 'package:swap/components/my_button.dart';
 import 'package:swap/components/my_textfield.dart';
+import 'package:swap/navigation.dart';
 
-class RegisterPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   final Function()? onTap;
-  const RegisterPage({super.key, required this.onTap});
+  const LoginPage({super.key, this.onTap});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _LoginPageState extends State<LoginPage> {
   // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
 
-  // sign user up method
-  void signUserUp() async {
-    //show loading circle
+  //error message to user
+  void showErrorMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          title: Center(
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // 显示加载指示器对话框
+  void showLoadingDialog() {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -30,44 +47,22 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       },
     );
+  }
 
-    //error message to user
-    void showErrorMessage(String message) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.deepPurple,
-            title: Center(
-              child: Text(
-                message,
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          );
-        },
-      );
-    }
+  // sign user in method
+  Future<bool> login(String mail, String password) async {
+    showLoadingDialog();
+    final db = await Db.create(
+        'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/test?retryWrites=true&w=majority');
+    await db.open();
 
-    //try creating the user
-    try {
-      //check if passwords match
-      if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-      } else {
-        showErrorMessage('Passwords do not match!');
-      }
-      //pop the loading circle
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      //pop the loading circle
-      Navigator.pop(context);
-      //show error message
-      showErrorMessage(e.code);
-    }
+    final users = db.collection('users');
+    final user =
+        await users.findOne(where.eq('email', mail).eq('password', password));
+
+    await db.close();
+
+    return user != null;
   }
 
   @override
@@ -80,7 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 15),
+                const SizedBox(height: 10),
 
                 // logo
                 Image.asset(
@@ -93,9 +88,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 25),
 
-                // Create an account for free!
+                // welcome back, you've been missed!
                 Text(
-                  'Create an account for free!',
+                  'Welcome back you\'ve been missed!',
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 16,
@@ -122,20 +117,38 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 10),
 
-                // confirm password textfield
-                MyTextField(
-                  controller: confirmPasswordController,
-                  hintText: 'Confirm Password',
-                  obscureText: true,
+                // forgot password?
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Forgot Password?',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 25),
 
-                // sign up button
+                // sign in button
                 MyButton(
-                  text: 'Sign Up',
-                  onTap: signUserUp,
-                ),
+                    text: 'Sign In',
+                    onTap: () async {
+                      final loggedIn = await login(
+                          emailController.text, passwordController.text);
+                      if (loggedIn) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Navigation()));
+                      } else {
+                        Navigator.pop(context);
+                        showErrorMessage('Invalid email or password');
+                      }
+                    }),
 
                 const SizedBox(height: 50),
                 /*
@@ -191,14 +204,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Already have an account?',
+                      'Not a member?',
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: const Text(
-                        'Login now',
+                        'Register now',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,

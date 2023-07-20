@@ -1,43 +1,31 @@
 import 'package:flutter/material.dart';
-import './pages/auth_page.dart';
-
-import 'screens/splash/splash_screen.dart';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(MyApp());
+import 'package:swap/navigation.dart';
+import 'package:swap/mongo_auth/login_or_register_page.dart';
+
+import '/screens/splash/splash_screen.dart';
+
+void main() {
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-        future: checkFirstTimeUser(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // 此時可以顯示一個加載指示器或啟動屏幕
-            return const CircularProgressIndicator();
-          } else {
-            if (snapshot.hasError) {
-              // 處理錯誤情況
-              return Text('Error: ${snapshot.error}');
-            } else {
-              bool isFirstTimeUser = snapshot.data ?? true;
-              return MaterialApp(
-                //debugShowCheckedModeBanner: false,
-                title: 'Swap Demo',
-                home: isFirstTimeUser ? SplashScreen() : const AuthPage(),
-              );
-            }
-          }
-        });
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  autoLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? loggedIn = prefs.getBool('loggedin');
+
+    if (loggedIn == true) {
+      return const Navigation();
+    } else {
+      return const LoginOrRegisterPage();
+    }
   }
 
   Future<bool> checkFirstTimeUser() async {
@@ -50,5 +38,31 @@ class MyApp extends StatelessWidget {
     }
 
     return isFirstTime;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+        future: checkFirstTimeUser(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // 此时可以显示一个加载指示器或启动屏幕
+            return const CircularProgressIndicator();
+          } else {
+            if (snapshot.hasError) {
+              // 处理错误情况
+              return Text('Error: ${snapshot.error}');
+            } else {
+              bool isFirstTimeUser = snapshot.data ?? true;
+              return MaterialApp(
+                //debugShowCheckedModeBanner: false,
+                title: 'Swap Demo',
+                home: isFirstTimeUser
+                    ? const SplashScreen()
+                    : const LoginOrRegisterPage(),
+              );
+            }
+          }
+        });
   }
 }

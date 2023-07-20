@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swap/image_input.dart';
 import 'package:swap/exchange_screen.dart';
+import 'package:swap/product_launch.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
@@ -43,7 +44,7 @@ class _NavigationState extends State<Navigation> {
         Container(
           color: const Color.fromRGBO(12, 59, 46, 1),
           alignment: Alignment.center,
-          child: const ImageInput(),
+          child: const ProductLauch(),
         ),
         Container(
           color: const Color.fromRGBO(12, 59, 46, 1),

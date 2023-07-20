@@ -75,6 +75,8 @@ flutter:
    - assets/images/logopng.png
    - assets/images/doll.png
    - assets/images/curler.png
+   - assets/images/glass.png
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

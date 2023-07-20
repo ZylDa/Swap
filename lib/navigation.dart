@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:swap/image_input.dart';
 import 'package:swap/exchange_screen.dart';
 import 'package:swap/product_launch.dart';
+
+Future<String?> getUserEmail() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('mail');
+}
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
@@ -11,6 +18,13 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
+  Future<String?>? userEmail; // Declare userEmail as nullable Future
+  @override
+  void initState() {
+    super.initState();
+    userEmail = getUserEmail(); // Initialize userEmail in initState
+  }
+
   int currentPageIndex = 0;
 
   @override
@@ -49,9 +63,9 @@ class _NavigationState extends State<Navigation> {
         Container(
           color: const Color.fromRGBO(12, 59, 46, 1),
           alignment: Alignment.center,
-          child: const Text(
-            'Profile',
-            style: TextStyle(
+          child: Text(
+            '$userEmail\'s profile',
+            style: const TextStyle(
               color: Colors.white,
             ),
           ),

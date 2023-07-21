@@ -76,6 +76,7 @@ class _ProductLaunchState extends State<ProductLaunch> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 40,),
                     const Text(
                       '你有料嗎？',
                       style: TextStyle(
@@ -83,7 +84,7 @@ class _ProductLaunchState extends State<ProductLaunch> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     const Text(
                       '商品名稱',
                       style: TextStyle(

@@ -18,11 +18,10 @@ class MongoDatabase {
   }
 
   static Future<String> insert(MongodbModel data) async {
+    connect();
     try {
-      var result = await collection.insertOne(data.toJson());
-      // if(result.isSuccess){
-      //   print('');
-      // }
+      var result = await collection.insert(data.toJson());
+      await db.close();
       return result;
     } catch (e) {
       print(e.toString());

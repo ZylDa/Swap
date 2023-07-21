@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:swap/image_input.dart';
 import 'package:swap/exchange_screen.dart';
@@ -12,6 +14,12 @@ class Navigation extends StatefulWidget {
 
 class _NavigationState extends State<Navigation> {
   int currentPageIndex = 0;
+  File? _capturedImage;
+
+  //final _imageInputKey = GlobalKey<_ImageInputState>();
+  //void takePicture() {
+  //  _imageInputKey.currentState?.takePicture();
+  //}
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +27,13 @@ class _NavigationState extends State<Navigation> {
       bottomNavigationBar: NavigationBar(
         backgroundColor: const Color.fromRGBO(204, 206, 205, 1),
         onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
+          if (index == 1) {
+            _takePicture();
+          } else {
+            setState(() {
+              currentPageIndex = index;
+            });
+          }
         },
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
@@ -41,11 +53,12 @@ class _NavigationState extends State<Navigation> {
       ),
       body: <Widget>[
         const ExchangeScreen(),
-        Container(
-          color: const Color.fromRGBO(12, 59, 46, 1),
-          alignment: Alignment.center,
-          child: const ProductLauch(),
-        ),
+        ProductLaunch(capturedImage: _capturedImage),
+        //Container(
+        //  color: const Color.fromRGBO(12, 59, 46, 1),
+        //  alignment: Alignment.center,
+        //  child: ImageInput(),
+        //),
         Container(
           color: const Color.fromRGBO(12, 59, 46, 1),
           alignment: Alignment.center,
@@ -58,5 +71,30 @@ class _NavigationState extends State<Navigation> {
         ),
       ][currentPageIndex],
     );
+  }
+
+  void _takePicture() async {
+    File? imageFile = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ImageInput(
+          onPictureTaken: (image) => _onPictureTaken(image),
+        ),
+      ),
+    );
+
+    if (imageFile != null) {
+      setState(() {
+        _capturedImage = imageFile;
+        //currentPageIndex = 1; // Navigate to the "Add" tab
+      });
+    }
+  }
+
+  void _onPictureTaken(File image) {
+    //_capturedImage = image;
+    setState(() {
+      currentPageIndex = 1; // Navigate to the "Add" tab
+    });
   }
 }

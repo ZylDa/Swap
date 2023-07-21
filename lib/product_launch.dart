@@ -1,27 +1,38 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'mongodb/mongodb_model.dart';
 import 'mongodb/mongodb.dart';
 import 'tag_text_field.dart';
 
-class ProductLauch extends StatefulWidget {
-  const ProductLauch({super.key});
+class ProductLaunch extends StatefulWidget {
+  final File? capturedImage;
+  const ProductLaunch({super.key, this.capturedImage});
 
   @override
-  State<ProductLauch> createState() {
-    return _ProductLauchState(); //有機會
+  State<ProductLaunch> createState() {
+    return _ProductLaunchState(); //有機會
   }
 }
 
-class _ProductLauchState extends State<ProductLauch> {
+class _ProductLaunchState extends State<ProductLaunch> {
   final nameController = TextEditingController();
   final tag1Controller = TextEditingController();
   final tag2Controller = TextEditingController();
   final tag3Controller = TextEditingController();
   final tag4Controller = TextEditingController();
   final tag5Controller = TextEditingController();
+  //File? _productImage;
 
   List<String> tags = [];
+
+  @override
+  void initState() {
+    if (widget.capturedImage != null) {
+      _productImage = widget.capturedImage!;
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -33,6 +44,8 @@ class _ProductLauchState extends State<ProductLauch> {
     tag5Controller.dispose();
     super.dispose();
   }
+
+  File? _productImage;
 
   @override
   Widget build(BuildContext context) {
@@ -135,10 +148,15 @@ class _ProductLauchState extends State<ProductLauch> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          'assets/images/glass.png',
-                          width: 300,
-                        ),
+                        child: _productImage != null
+                            ? Image.file(
+                                _productImage!,
+                                width: 300,
+                              )
+                            : Image.asset(
+                                'assets/images/glass.png',
+                                width: 300,
+                              ),
                       ),
                       const SizedBox(width: 50),
                       ElevatedButton.icon(
@@ -147,7 +165,8 @@ class _ProductLauchState extends State<ProductLauch> {
                         label: const Text(""),
                         style: ElevatedButton.styleFrom(
                           fixedSize: const Size(150, 150),
-                          backgroundColor: const Color.fromARGB(255, 206, 206, 206),
+                          backgroundColor:
+                              const Color.fromARGB(255, 206, 206, 206),
                         ),
                       ),
                     ],

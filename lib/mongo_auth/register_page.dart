@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' hide Center, State;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:swap/components/my_button.dart';
 import 'package:swap/components/my_textfield.dart';
@@ -66,6 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
         try {
           await users.insert({'email': mail, 'password': password});
           await db.close();
+          saveUserEmail(mail);
           Navigator.pop(context);
           return true; // 注册成功，返回 true
         } catch (e) {
@@ -86,6 +88,12 @@ class _RegisterPageState extends State<RegisterPage> {
       showErrorMessage('Invalid email format');
       return false; // 邮箱格式不正确，返回 false
     }
+  }
+
+  // 登录成功后调用此方法保存邮箱信息
+  void saveUserEmail(String email) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('mail', email);
   }
 
   @override

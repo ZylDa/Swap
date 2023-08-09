@@ -41,12 +41,11 @@ class _NavigationState extends State<Navigation> {
       bottomNavigationBar: NavigationBar(
         backgroundColor: const Color.fromRGBO(204, 206, 205, 1),
         onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
           if (index == 1) {
-            _takePicture();
-          } else {
-            setState(() {
-              currentPageIndex = index;
-            });
+            _takePicture(); // Call _takePicture function directly when Add tab is tapped
           }
         },
         selectedIndex: currentPageIndex,
@@ -100,15 +99,18 @@ class _NavigationState extends State<Navigation> {
     if (imageFile != null) {
       setState(() {
         _capturedImage = imageFile;
-        //currentPageIndex = 1; // Navigate to the "Add" tab
+        currentPageIndex = 1; // Navigate to the "Add" tab
       });
     }
   }
 
   void _onPictureTaken(File image) {
-    //_capturedImage = image;
-    setState(() {
-      currentPageIndex = 1; // Navigate to the "Add" tab
-    });
+    _capturedImage = image;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProductLaunch(capturedImage: _capturedImage),
+      ),
+    );
   }
 }

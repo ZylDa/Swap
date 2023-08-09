@@ -4,6 +4,7 @@ import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'mongodb/mongodb_model.dart';
 import 'mongodb/mongodb.dart';
 import 'tag_text_field.dart';
+import 'image_input.dart';
 
 class ProductLaunch extends StatefulWidget {
   final File? capturedImage;
@@ -22,7 +23,6 @@ class _ProductLaunchState extends State<ProductLaunch> {
   final tag3Controller = TextEditingController();
   final tag4Controller = TextEditingController();
   final tag5Controller = TextEditingController();
-  //File? _productImage;
 
   List<String> tags = [];
 
@@ -76,7 +76,9 @@ class _ProductLaunchState extends State<ProductLaunch> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 40,),
+                    const SizedBox(
+                      height: 40,
+                    ),
                     const Text(
                       '你有料嗎？',
                       style: TextStyle(
@@ -147,21 +149,39 @@ class _ProductLaunchState extends State<ProductLaunch> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: _productImage != null
-                            ? Image.file(
+                      _productImage != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.file(
                                 _productImage!,
                                 width: 300,
-                              )
-                            : Image.asset(
+                              ),
+                            )
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.asset(
                                 'assets/images/glass.png',
                                 width: 300,
                               ),
-                      ),
+                            ),
                       const SizedBox(width: 50),
                       ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ImageInput(
+                                onPictureTaken: (image) {
+                                  Navigator.pop(
+                                      context); // Close ImageInput after taking photo
+                                  setState(() {
+                                    _productImage = image;
+                                  });
+                                },
+                              ),
+                            ),
+                          );
+                        },
                         icon: const Icon(Icons.add),
                         label: const Text(""),
                         style: ElevatedButton.styleFrom(

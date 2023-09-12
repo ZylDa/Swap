@@ -3,7 +3,7 @@ import 'package:swap/components/default_button.dart';
 import 'package:swap/mongo_auth/login_or_register_page.dart';
 import 'package:swap/screens/splash/components/splash_content.dart';
 
-import '../../../constants.dart';
+import '../constants.dart';
 import 'package:swap/size_config.dart';
 
 class Body extends StatefulWidget {

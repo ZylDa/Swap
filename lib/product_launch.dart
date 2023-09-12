@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'mongodb/mongodb_model.dart';
 import 'mongodb/mongodb.dart';
-import 'tag_text_field.dart';
+import 'components/tag_text_field.dart';
 
 class ProductLaunch extends StatefulWidget {
   final File? capturedImage;
@@ -76,7 +76,9 @@ class _ProductLaunchState extends State<ProductLaunch> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 40,),
+                    const SizedBox(
+                      height: 40,
+                    ),
                     const Text(
                       '你有料嗎？',
                       style: TextStyle(

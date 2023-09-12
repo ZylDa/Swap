@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/tag_widget.dart';
+import '../mongodb/database_helper.dart';
 
 Widget buildCard({
   required String image,
@@ -9,10 +10,11 @@ Widget buildCard({
   required List<String> tags,
 }) {
   return Padding(
-    padding: const EdgeInsets.all(16.0), // Outer padding for the card
+    padding: const EdgeInsets.symmetric(
+        horizontal: 16, vertical: 10), // Outer padding for the card
     child: Container(
       width: 400, //300
-      height: 600, //440
+      height: 500, //440
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
@@ -61,6 +63,7 @@ Widget buildCard({
             mainAxisAlignment: MainAxisAlignment.center,
             children: tags.map((tag) => TagWidget(tag)).toList(),
           ),
+          const SizedBox(height: 15),
         ],
       ),
     ),

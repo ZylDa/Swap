@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swap/draglike/card_swipe_page.dart';
 
 import 'package:swap/image_input.dart';
-import 'package:swap/exchange_page.dart';
+import 'package:swap/screens/exchange_page.dart';
 import 'package:swap/product_launch.dart';
 
 Future<String?> getUserEmail() async {

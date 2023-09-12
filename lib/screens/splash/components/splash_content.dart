@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swap/constants.dart';
+import 'package:swap/screens/splash/constants.dart';
 import 'package:swap/size_config.dart';
 
 class SplashContent extends StatelessWidget {

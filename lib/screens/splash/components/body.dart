@@ -21,7 +21,7 @@ class _BodyState extends State<Body> {
       "image": "assets/images/onboard_test_2.jpg"
     },
     {"text": "如何上架呢？", "image": "assets/images/onboard_test_1.jpg"},
-    {"text": "如何交換呢", "image": "assets/images/onboard_test_3.jpg"},
+    {"text": "如何交換呢？", "image": "assets/images/onboard_test_3.jpg"},
   ];
 
   @override

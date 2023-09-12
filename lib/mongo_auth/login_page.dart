@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' hide Center, State;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:swap/components/my_button.dart';
 import 'package:swap/components/my_textfield.dart';
@@ -47,6 +48,12 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
     );
+  }
+
+  // 保存用户登录状态
+  Future<void> saveUserLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', true);
   }
 
   // sign user in method
@@ -140,6 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                       final loggedIn = await login(
                           emailController.text, passwordController.text);
                       if (loggedIn) {
+                        await saveUserLoginStatus(); // 保存用户登录状态
                         Navigator.push(
                             context,
                             MaterialPageRoute(

@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swap/draglike/card_swipe_page.dart';
 
 import 'package:swap/image_input.dart';
-import 'package:swap/exchange_screen.dart';
+import 'package:swap/exchange_page.dart';
 import 'package:swap/product_launch.dart';
 
 Future<String?> getUserEmail() async {
@@ -76,12 +77,7 @@ class _NavigationState extends State<Navigation> {
         Container(
           color: const Color.fromRGBO(12, 59, 46, 1),
           alignment: Alignment.center,
-          child: Text(
-            '$userEmail\'s profile',
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-          ),
+          child: CardSwipePage(),
         ),
       ][currentPageIndex],
     );

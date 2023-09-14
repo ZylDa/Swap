@@ -73,19 +73,19 @@ class _RegisterPageState extends State<RegisterPage> {
         } catch (e) {
           await db.close();
           Navigator.pop(context);
-          showErrorMessage('Failed to register');
+          showErrorMessage('註冊失敗');
           return false; // 注册失败，返回 false
         }
       } else {
         await db.close();
         Navigator.pop(context);
-        showErrorMessage('Passwords do not match');
+        showErrorMessage('密碼錯誤');
         return false; // 密码不匹配，返回 false
       }
     } else {
       await db.close();
       Navigator.pop(context);
-      showErrorMessage('Invalid email format');
+      showErrorMessage('錯誤的信箱格式');
       return false; // 邮箱格式不正确，返回 false
     }
   }
@@ -121,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // Create an account for free!
                 Text(
-                  'Create an account for free!',
+                  '創建你的帳號！',
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 16,
@@ -159,7 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // sign up button
                 MyButton(
-                    text: 'Sign Up',
+                    text: '註冊',
                     onTap: () async {
                       bool registerResult = await register(
                           emailController.text,
@@ -172,11 +172,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               builder: (context) => const Navigation()),
                         );
                       } else {
-                        print('Registration failed');
+                        print('註冊失敗');
                       }
                     }),
 
-                const SizedBox(height: 50),
+                const SizedBox(height: 30),
                 /*
                 // or continue with
                 Padding(
@@ -230,14 +230,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Already have an account?',
+                      '已經有帳號了嗎?',
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: const Text(
-                        'Login now',
+                        '去登入!',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,

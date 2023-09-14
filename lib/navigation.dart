@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swap/image_input.dart';
 import 'package:swap/screens/exchange_page.dart';
 import 'package:swap/product_launch.dart';
+import 'package:swap/screens/personal_page.dart';
 
 Future<String?> getUserEmail() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -72,12 +73,12 @@ class _NavigationState extends State<Navigation> {
         //  alignment: Alignment.center,
         //  child: ImageInput(),
         //),
-        Container(
-          color: const Color.fromRGBO(12, 59, 46, 1),
-          alignment: Alignment.center,
-          //child: CardSwipePage(),
-          child: const Text('user'),
-        ),
+        //Container(
+        //  color: const Color.fromARGB(255, 196, 194, 178),
+        //  alignment: Alignment.center,
+        //  child: const Text('user'),
+        //),
+        PersonalPage(),
       ][currentPageIndex],
     );
   }

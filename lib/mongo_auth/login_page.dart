@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // welcome back, you've been missed!
                 Text(
-                  'Welcome back you\'ve been missed!',
+                  '歡迎加入Swap><',
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 16,
@@ -131,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'Forgot Password?',
+                        '忘記密碼?',
                         style: TextStyle(color: Colors.grey[600]),
                       ),
                     ],
@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // sign in button
                 MyButton(
-                    text: 'Sign In',
+                    text: '登入',
                     onTap: () async {
                       final loggedIn = await login(
                           emailController.text, passwordController.text);
@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => const Navigation()));
                       } else {
                         Navigator.pop(context);
-                        showErrorMessage('Invalid email or password');
+                        showErrorMessage('帳號或密碼錯誤!');
                       }
                     }),
 
@@ -212,14 +212,14 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a member?',
+                      '還沒有帳號嗎?',
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: const Text(
-                        'Register now',
+                        '馬上註冊!',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,

@@ -51,7 +51,7 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(1, 196, 194, 178),
+        backgroundColor: const Color.fromARGB(255, 196, 194, 178),
         title: const Text('Search'),
         actions: <Widget>[
           IconButton(
@@ -70,7 +70,8 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                   builder: (BuildContext context) {
                     return Scaffold(
                       appBar: AppBar(
-                        backgroundColor: const Color.fromARGB(1, 196, 194, 178),
+                        backgroundColor:
+                            const Color.fromARGB(255, 196, 194, 178),
                         title: const Text('Notification'),
                       ),
                     );

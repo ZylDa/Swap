@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class ItemSelector extends StatefulWidget {
+  const ItemSelector({super.key});
+
   @override
   _ItemSelectorState createState() => _ItemSelectorState();
 }
@@ -19,7 +21,7 @@ class _ItemSelectorState extends State<ItemSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 300, // 設定寬度
       height: 85, // 設定高度
       child: Stack(
@@ -40,7 +42,7 @@ class _ItemSelectorState extends State<ItemSelector> {
           Center(
             child: CarouselSlider(
               items: itemImages.map((imagePath) {
-                return Container(
+                return SizedBox(
                   width: 75, // 設定圖片寬度
                   height: 75, // 設定圖片高度
                   child: ClipOval(

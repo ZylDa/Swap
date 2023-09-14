@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:swap/draglike/card_swipe_page.dart';
 
 import 'package:swap/image_input.dart';
 import 'package:swap/screens/exchange_page.dart';
@@ -77,7 +76,8 @@ class _NavigationState extends State<Navigation> {
         Container(
           color: const Color.fromRGBO(12, 59, 46, 1),
           alignment: Alignment.center,
-          child: CardSwipePage(),
+          //child: CardSwipePage(),
+          child: const Text('user'),
         ),
       ][currentPageIndex],
     );

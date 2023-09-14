@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import '../widgets/build_card.dart';
-import '../item_selector.dart';
+import '../widgets/item_selector.dart';
+import '../mongodb/database_helper.dart';
 
 class ExchangeScreen extends StatefulWidget {
   const ExchangeScreen({Key? key}) : super(key: key);
@@ -13,6 +14,38 @@ class ExchangeScreen extends StatefulWidget {
 }
 
 class _ExchangeScreenState extends State<ExchangeScreen> {
+  List<String> itemNames = [];
+  List<String> itemImages = [];
+  List<List<String>> itemTags = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // 在初始化时从数据库获取物品名称、图片、品牌名和颜色
+    fetchItemData();
+  }
+
+  Future<void> fetchItemData() async {
+    List<String> names = await DatabaseHelper().fetchItemNames();
+    List<String> images = await DatabaseHelper().fetchItemImages();
+    List<String> logos = await DatabaseHelper().fetchItemLogo();
+    List<List<String>> colors = await DatabaseHelper().fetchItemColor();
+
+    List<List<String>> tags = [];
+
+    // 合并品牌名和颜色为标签
+    for (int i = 0; i < logos.length; i++) {
+      List<String> combinedTags = [logos[i], ...colors[i]]; // 合并品牌名和颜色
+      tags.add(combinedTags);
+    }
+
+    setState(() {
+      itemNames = names;
+      itemImages = images;
+      itemTags = tags;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,39 +85,26 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
         children: [
           Expanded(
             child: Swiper(
+              itemCount: itemNames.length,
               itemBuilder: (BuildContext context, int index) {
-                if (index == 0) {
-                  return buildCard(
-                    image: 'assets/images/doll.png',
-                    ownerName: 'Owner 1',
-                    itemName: 'Item 1',
-                    tags: ['Tag1', 'Tag2'],
-                  );
-                } else if (index == 1) {
-                  return buildCard(
-                    image: 'assets/images/corgi.jpg',
-                    ownerName: 'Owner 2',
-                    itemName: 'Item 2',
-                    tags: ['Tag3', 'Tag4'],
-                  );
-                } else if (index == 2) {
-                  return buildCard(
-                    image: 'assets/images/dog.jpeg',
-                    ownerName: 'Owner 3',
-                    itemName: 'Item 3',
-                    tags: ['Tag5', 'Tag6'],
-                  );
-                }
-                return Container(); // Placeholder for other indices
+                String itemName = itemNames[index];
+                String imageBase64 = itemImages[index];
+                List<String> tags = itemTags[index];
+
+                return buildCard(
+                  imageBase64: imageBase64,
+                  ownerName: 'Owner $index',
+                  itemName: itemName,
+                  tags: tags,
+                );
               },
-              itemCount: 3, // Replace with the number of cards you want
-              layout: SwiperLayout.TINDER, // Choose your preferred layout
+              layout: SwiperLayout.TINDER,
               itemWidth: 400,
               itemHeight: 500,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5.0), // 設定上邊距
+          const Padding(
+            padding: EdgeInsets.only(bottom: 5.0),
             child: ItemSelector(),
           ),
         ],

@@ -1,20 +1,27 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 import '../components/tag_widget.dart';
-import '../mongodb/database_helper.dart';
 
 Widget buildCard({
-  required String image,
+  required String imageBase64,
   required String ownerName,
   required String itemName,
-  required List<String> tags,
+  required List<String> tags, // 包含品牌名和颜色的标签列表
 }) {
+  List<int> imageBytes = base64Decode(imageBase64);
+  Image image = Image.memory(
+    Uint8List.fromList(imageBytes),
+    fit: BoxFit.contain,
+  );
+
   return Padding(
-    padding: const EdgeInsets.symmetric(
-        horizontal: 16, vertical: 10), // Outer padding for the card
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
     child: Container(
-      width: 400, //300
-      height: 500, //440
+      width: 400,
+      height: 500,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
@@ -31,7 +38,7 @@ Widget buildCard({
           Text(
             ownerName,
             style: const TextStyle(
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -39,14 +46,9 @@ Widget buildCard({
             height: 15,
           ),
           Container(
-            width: 270, // 固定图像容器的宽度
-            height: 270, // 固定图像容器的高度
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(image),
-                fit: BoxFit.contain,
-              ),
-            ),
+            width: 270,
+            height: 270,
+            child: image,
           ),
           const SizedBox(
             height: 15,
@@ -54,14 +56,18 @@ Widget buildCard({
           Text(
             itemName,
             style: const TextStyle(
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: tags.map((tag) => TagWidget(tag)).toList(),
+          Wrap(
+            alignment: WrapAlignment.center,
+            runSpacing: 3.0,
+            spacing: 5.0,
+            children: tags.map((tag) {
+              return TagWidget(tag);
+            }).toList(),
           ),
           const SizedBox(height: 15),
         ],

@@ -5,7 +5,6 @@ import 'package:swap/navigation.dart';
 import 'package:swap/mongo_auth/login_or_register_page.dart';
 
 import '/screens/splash/splash_screen.dart';
-import './draglike/card_item.dart';
 
 void main() async {
   runAppWithLoginStatus();

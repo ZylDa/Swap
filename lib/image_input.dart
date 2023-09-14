@@ -29,10 +29,8 @@ class _ImageInputState extends State<ImageInput> {
     setState(() {
       _selectedImage = File(pickedImage.path);
     });
-    if (widget.onPictureTaken != null) {
-      widget.onPictureTaken(_selectedImage!);
-    }
-    Navigator.pop(context, _selectedImage);
+    widget.onPictureTaken(_selectedImage!);
+      Navigator.pop(context, _selectedImage);
   }
 
   @override

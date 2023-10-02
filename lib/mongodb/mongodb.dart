@@ -24,7 +24,7 @@ class MongoDatabase {
       await db.close();
       return result;
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return e.toString();
     }
   }

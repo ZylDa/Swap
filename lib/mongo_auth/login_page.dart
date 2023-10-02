@@ -56,6 +56,12 @@ class _LoginPageState extends State<LoginPage> {
     await prefs.setBool('isLoggedIn', true);
   }
 
+  // 保存用户邮箱
+  Future<void> saveUserEmail(String email) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('mail', email);
+  }
+
   // sign user in method
   Future<bool> login(String mail, String password) async {
     showLoadingDialog();
@@ -69,7 +75,12 @@ class _LoginPageState extends State<LoginPage> {
 
     await db.close();
 
-    return user != null;
+    if (user != null) {
+      await saveUserEmail(mail); // 保存用户邮箱
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -97,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // welcome back, you've been missed!
                 Text(
-                  '歡迎加入Swap><',
+                  'Welcome to Swap><',
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 16,
@@ -109,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                 // email textfield
                 MyTextField(
                   controller: emailController,
-                  hintText: 'NCCU E-mail',
+                  hintText: 'University E-mail',
                   obscureText: false,
                 ),
 
@@ -131,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        '忘記密碼?',
+                        'Forgot your password?',
                         style: TextStyle(color: Colors.grey[600]),
                       ),
                     ],
@@ -142,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // sign in button
                 MyButton(
-                    text: '登入',
+                    text: 'Login',
                     onTap: () async {
                       final loggedIn = await login(
                           emailController.text, passwordController.text);
@@ -154,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => const Navigation()));
                       } else {
                         Navigator.pop(context);
-                        showErrorMessage('帳號或密碼錯誤!');
+                        showErrorMessage('Wrong E-mail or Password!');
                       }
                     }),
 
@@ -212,14 +223,14 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '還沒有帳號嗎?',
+                      'Not a member?',
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: const Text(
-                        '馬上註冊!',
+                        'Register now',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,

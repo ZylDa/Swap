@@ -15,16 +15,16 @@ Future<void> runAppWithLoginStatus() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-  runApp(MyApp(isLoggedIn: isLoggedIn));
+  runApp(_MyApp(isLoggedIn: isLoggedIn));
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key, required bool isLoggedIn});
+class _MyApp extends StatefulWidget {
+  const _MyApp({required bool isLoggedIn});
   @override
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<_MyApp> {
   autoLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? loggedIn = prefs.getBool('loggedin');

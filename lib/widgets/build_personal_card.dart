@@ -1,52 +1,75 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
-Widget buildItemCard(String title, String imageUrl) {
+Widget buildItemCard({
+  required String itemName,
+  required String imageBase64,
+}) {
+  List<int> imageBytes = base64Decode(imageBase64);
+  Image image = Image.memory(
+    Uint8List.fromList(imageBytes),
+    fit: BoxFit.contain,
+  );
+
   return Container(
-    margin: const EdgeInsets.symmetric(horizontal: 8),
+    margin: const EdgeInsets.symmetric(horizontal: 12),
     width: 128,
     height: 184,
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(10),
-      boxShadow: const [
-        BoxShadow(
-          color: Color(0x19000000),
-          blurRadius: 20,
-          offset: Offset(0, 4),
-          spreadRadius: 0,
-        ),
-      ],
-    ),
-    child: Column(
+    child: Stack(
       children: [
-        Container(
-          width: 128,
-          height: 128,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(imageUrl),
-              fit: BoxFit.fill,
-            ),
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
+        // 底部容器，用於添加陰影
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x19000000),
+                  blurRadius: 10,
+                  offset: Offset(5, 5),
+                  spreadRadius: 4,
+                ),
+              ],
             ),
           ),
         ),
-        SizedBox(
-          width: 128,
-          height: 29,
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: Color(0xFF151515),
-              fontSize: 14,
-              fontFamily: 'Basic',
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.70,
+        Column(
+          children: [
+            Container(
+              width: 128,
+              height: 128,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+              ),
+              child: image,
             ),
-            textAlign: TextAlign.center,
-          ),
+            SizedBox(
+              width: 128,
+              height: 56,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                runAlignment: WrapAlignment.center,
+                children: [
+                  Text(
+                    itemName,
+                    style: const TextStyle(
+                      color: Color(0xFF151515),
+                      fontSize: 14,
+                      fontFamily: 'Basic',
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.70,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ],
     ),

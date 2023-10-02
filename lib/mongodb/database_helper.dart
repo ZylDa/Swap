@@ -51,4 +51,26 @@ class DatabaseHelper {
 
     return colors;
   }
+
+  //抓取資料庫中的owner
+  Future<List<String>> fetchItemOwner() async {
+    final db = await Db.create(
+        'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
+    await db.open();
+    final collection = db.collection('huatest64');
+    final items = await collection.find().toList();
+    await db.close();
+    return items.map((item) => item['owner'] as String).toList();
+  }
+
+  //抓取符合owner資料的物品
+  Future<List<String>> fetchItemImageByOwner(String ownerEmail) async {
+    final db = await Db.create(
+        'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
+    await db.open();
+    final collection = db.collection('huatest64');
+    final items = await collection.find({'owner': ownerEmail}).toList();
+    await db.close();
+    return items.map((item) => item['照片base64'] as String).toList();
+  }
 }

@@ -1,69 +1,100 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:swap/mongodb/database_helper.dart';
+import 'package:swap/navigation.dart';
+import 'package:swap/size_config.dart';
 
 class ItemSelector extends StatefulWidget {
   const ItemSelector({super.key});
 
   @override
-  _ItemSelectorState createState() => _ItemSelectorState();
+  ItemSelectorState createState() => ItemSelectorState();
 }
 
-class _ItemSelectorState extends State<ItemSelector> {
-  List<String> itemImages = [
-    'assets/images/curler.png',
-    'assets/images/nike.jpg',
-    'assets/images/birkenstock.jpg',
-    'assets/images/yamaha.jpg',
-    // Add more image paths as needed
-  ];
+class ItemSelectorState extends State<ItemSelector> {
+  List<String> myItemImages = [];
+  CarouselSlider? carouselSlider;
 
   int currentIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    // 在初始化时从数据库获取物品名称、图片、品牌名和颜色
+    fetchItemImage();
+  }
+
+  Future<void> fetchItemImage() async {
+    // 获取当前用户的email
+    String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
+    List<String> images =
+        await DatabaseHelper().fetchItemImageByOwner(currentUserEmail);
+
+    if (mounted) {
+      setState(() {
+        myItemImages = images;
+        // 創建 CarouselSlider
+        carouselSlider = createCarouselSlider();
+      });
+    }
+  }
+
+  CarouselSlider createCarouselSlider() {
+    return CarouselSlider(
+      items: myItemImages.map((base64String) {
+        List<int> imageBytes = base64Decode(base64String);
+        Image image = Image.memory(
+          Uint8List.fromList(imageBytes),
+          fit: BoxFit.cover,
+        );
+
+        return Container(
+          width: 75, // 設定圖片寬度
+          height: 75, // 設定圖片高度
+          margin: const EdgeInsets.symmetric(horizontal: 15),
+          child: ClipOval(
+            child: image,
+          ),
+        );
+      }).toList(),
+      options: CarouselOptions(
+        enlargeCenterPage: true,
+        viewportFraction: 0.3,
+        height: 80.0,
+        onPageChanged: (index, reason) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 300, // 設定寬度
-      height: 85, // 設定高度
+      width: SizeConfig.screenWidth,
+      height: 85,
       child: Stack(
         children: <Widget>[
           Center(
             child: Container(
-              width: 85, // 設定外框寬度
-              height: 85, // 設定外框高度
+              width: 85,
+              height: 85,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.grey,
+                  color: const Color.fromARGB(255, 196, 194, 178),
                   width: 3.0,
                 ),
               ),
             ),
           ),
           Center(
-            child: CarouselSlider(
-              items: itemImages.map((imagePath) {
-                return SizedBox(
-                  width: 75, // 設定圖片寬度
-                  height: 75, // 設定圖片高度
-                  child: ClipOval(
-                    child: Image.asset(
-                      imagePath,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
-              }).toList(),
-              options: CarouselOptions(
-                enlargeCenterPage: true,
-                viewportFraction: 0.35,
-                height: 85.0,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-              ),
-            ),
+            child: carouselSlider ?? const SizedBox(), // 使用已創建的 carouselSlider
           ),
         ],
       ),

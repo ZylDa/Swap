@@ -73,25 +73,25 @@ class _RegisterPageState extends State<RegisterPage> {
         } catch (e) {
           await db.close();
           Navigator.pop(context);
-          showErrorMessage('註冊失敗');
+          showErrorMessage('Failed to register');
           return false; // 注册失败，返回 false
         }
       } else {
         await db.close();
         Navigator.pop(context);
-        showErrorMessage('密碼錯誤');
+        showErrorMessage('Mismatch password');
         return false; // 密码不匹配，返回 false
       }
     } else {
       await db.close();
       Navigator.pop(context);
-      showErrorMessage('錯誤的信箱格式');
+      showErrorMessage('Wrong email format');
       return false; // 邮箱格式不正确，返回 false
     }
   }
 
-  // 登录成功后调用此方法保存邮箱信息
-  void saveUserEmail(String email) async {
+  // 保存用户邮箱
+  Future<void> saveUserEmail(String email) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('mail', email);
   }
@@ -121,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // Create an account for free!
                 Text(
-                  '創建你的帳號！',
+                  'Create an account for free!',
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 16,
@@ -133,7 +133,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 // email textfield
                 MyTextField(
                   controller: emailController,
-                  hintText: 'NCCU E-mail',
+                  hintText: 'University E-mail',
                   obscureText: false,
                 ),
 
@@ -159,7 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // sign up button
                 MyButton(
-                    text: '註冊',
+                    text: 'Sign up',
                     onTap: () async {
                       bool registerResult = await register(
                           emailController.text,
@@ -172,7 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               builder: (context) => const Navigation()),
                         );
                       } else {
-                        print('註冊失敗');
+                        //print('Failed to register');
                       }
                     }),
 
@@ -230,14 +230,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '已經有帳號了嗎?',
+                      'Already have an account?',
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: const Text(
-                        '去登入!',
+                        'Log in!',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,

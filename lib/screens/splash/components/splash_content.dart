@@ -16,7 +16,7 @@ class SplashContent extends StatelessWidget {
       children: <Widget>[
         const VerticalSpacing(of: 25),
         Text(
-          "一拍即合-Swap",
+          "Swap-一拍即合",
           style: TextStyle(
             fontSize: getProportionateScreenWidth(36),
             color: kPrimaryColor,

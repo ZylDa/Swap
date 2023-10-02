@@ -78,7 +78,7 @@ class _NavigationState extends State<Navigation> {
         //  alignment: Alignment.center,
         //  child: const Text('user'),
         //),
-        PersonalPage(),
+        const PersonalPage(),
       ][currentPageIndex],
     );
   }

@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:swap/components/my_button.dart';
 import 'package:swap/components/my_textfield.dart';
+import 'package:swap/mongo_auth/login_or_register_page.dart';
 import 'package:swap/navigation.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,6 +13,17 @@ class LoginPage extends StatefulWidget {
 
   @override
   State<LoginPage> createState() => _LoginPageState();
+
+  // logout method
+  static Future<void> logout(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('loggedIn', false);
+    await prefs.remove('mail');
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginOrRegisterPage()),
+    );
+  }
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -53,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
   // 保存用户登录状态
   Future<void> saveUserLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', true);
+    await prefs.setBool('loggedIn', true);
   }
 
   // 保存用户邮箱
@@ -74,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
         await users.findOne(where.eq('email', mail).eq('password', password));
 
     await db.close();
+    Navigator.of(context, rootNavigator: true).pop();
 
     if (user != null) {
       await saveUserEmail(mail); // 保存用户邮箱

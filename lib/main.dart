@@ -6,32 +6,39 @@ import 'package:swap/mongo_auth/login_or_register_page.dart';
 
 import '/screens/splash/splash_screen.dart';
 
-void main() async {
+void main() {
   runAppWithLoginStatus();
 }
 
-Future<void> runAppWithLoginStatus() async {
+void runAppWithLoginStatus() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  bool loggedIn = prefs.getBool('loggedIn') ?? false;
 
-  runApp(_MyApp(isLoggedIn: isLoggedIn));
+  runApp(
+    MaterialApp(
+      title: 'Swap Demo',
+      home: _MyApp(loggedIn: loggedIn),
+    ),
+  );
 }
 
 class _MyApp extends StatefulWidget {
-  const _MyApp({required bool isLoggedIn});
+  const _MyApp({required bool loggedIn});
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<_MyApp> {
-  autoLogin() async {
+  Future<Widget?> autoLogin() async {
+    //showLoadingDialog();  // 顯示 loading dialog
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? loggedIn = prefs.getBool('loggedin');
+    bool? loggedIn = prefs.getBool('loggedIn');
 
     if (loggedIn == true) {
       return const Navigation();
     } else {
+      Navigator.of(context).pop(); // 移除 loading dialog
       return const LoginOrRegisterPage();
     }
   }
@@ -66,8 +73,21 @@ class _MyAppState extends State<_MyApp> {
                 title: 'Swap Demo',
                 home: isFirstTimeUser
                     ? const SplashScreen()
-                    : const LoginOrRegisterPage(),
-                //: const CardItem(),
+                    : FutureBuilder<Widget?>(
+                        future: autoLogin(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<Widget?> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            return snapshot.data ??
+                                const SizedBox(); // 使用 ?? 避免 null
+                          }
+                        },
+                      ),
               );
             }
           }

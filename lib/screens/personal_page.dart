@@ -3,6 +3,7 @@ import 'package:swap/mongodb/database_helper.dart';
 import 'package:swap/navigation.dart';
 import 'package:swap/size_config.dart';
 import 'package:swap/components/loading.dart';
+import 'package:swap/mongo_auth/login_page.dart';
 
 import '../widgets/build_personal_card.dart';
 
@@ -66,6 +67,45 @@ class _PersonalPageState extends State<PersonalPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  void _showSettingsMenu(BuildContext context) {
+    showMenu(
+      context: context,
+      position: const RelativeRect.fromLTRB(100, 100, 0, 0), // 設定菜單位置
+      items: [
+        PopupMenuItem(
+          child: ListTile(
+            leading: const Icon(Icons.history),
+            title: const Text('交換紀錄'),
+            onTap: () {
+              // 在這裡執行交換紀錄的操作
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        PopupMenuItem(
+          child: ListTile(
+            leading: const Icon(Icons.mail),
+            title: const Text('聯絡我們'),
+            onTap: () {
+              // 在這裡執行聯絡我們的操作
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        PopupMenuItem(
+          child: ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('登出'),
+            onTap: () async {
+              LoginPage.logout(context);
+              Navigator.pop(context);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -124,13 +164,26 @@ class _PersonalPageState extends State<PersonalPage> {
                   ),
                 ),
                 Positioned(
-                  top: 65,
-                  right: 30,
+                  top: 72,
+                  right: 70,
                   child: IconButton(
-                    iconSize: 50,
-                    icon: const Icon(Icons.doorbell_outlined),
+                    iconSize: 35,
+                    icon: const Icon(Icons.notifications),
+                    color: Colors.black,
                     onPressed: () {
                       _showNotification(context);
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: 72,
+                  right: 15,
+                  child: IconButton(
+                    iconSize: 35,
+                    icon: const Icon(Icons.settings),
+                    color: Colors.black,
+                    onPressed: () {
+                      _showSettingsMenu(context);
                     },
                   ),
                 ),

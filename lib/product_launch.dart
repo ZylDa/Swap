@@ -48,10 +48,10 @@ class _ProductLaunchState extends State<ProductLaunch> {
 
   @override
   Widget build(BuildContext context) {
-    tag1Controller.text = '藍色';
-    tag2Controller.text = 'nike';
-    tag3Controller.text = '生活用品';
-    tag4Controller.text = '白色';
+    tag1Controller.text = 'blue';
+    tag2Controller.text = 'ThermoFlask';
+    tag3Controller.text = 'white';
+    tag4Controller.text = 'solid';
     tags = [
       tag1Controller.text,
       tag2Controller.text,
@@ -94,7 +94,7 @@ class _ProductLaunchState extends State<ProductLaunch> {
                     ),
                     const SizedBox(height: 6),
                     TextField(
-                      controller: nameController..text = "環保杯",
+                      controller: nameController..text = "water bottle",
                       keyboardType: TextInputType.text,
                       autofocus: true,
                       decoration: InputDecoration(

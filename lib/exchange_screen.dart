@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swap/notification.dart';
 
 class ExchangeScreen extends StatefulWidget {
   const ExchangeScreen({super.key});
@@ -32,12 +33,7 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                 context,
                 MaterialPageRoute<void>(
                   builder: (BuildContext context) {
-                    return Scaffold(
-                      appBar: AppBar(
-                        backgroundColor: const Color.fromARGB(255, 38, 107, 87),
-                        title: const Text('Notification'),
-                      ),
-                    );
+                    return NotificationWidget();
                   },
                 ),
               );

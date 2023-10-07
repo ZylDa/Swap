@@ -2,16 +2,18 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'mongodb/mongodb_model.dart';
 import 'mongodb/mongodb.dart';
+import 'navigation.dart';
 import './components/tag_text_field.dart';
 import 'image_input.dart';
 
 class ProductLaunch extends StatefulWidget {
   final File? capturedImage;
-  const ProductLaunch({super.key, this.capturedImage});
+  final String? id;
+  const ProductLaunch({super.key, this.capturedImage,  this.id});
 
   @override
   State<ProductLaunch> createState() {
-    return _ProductLaunchState(); //有機會
+    return _ProductLaunchState(); 
   }
 }
 
@@ -23,12 +25,16 @@ class _ProductLaunchState extends State<ProductLaunch> {
   final tag4Controller = TextEditingController();
   final tag5Controller = TextEditingController();
 
-  List<String> tags = [];
+  //List<String> tags = [];
+  
 
   @override
   void initState() {
     if (widget.capturedImage != null) {
       _productImage = widget.capturedImage!;
+    }
+    if(widget.id != null) {
+      id = widget.id!;
     }
     super.initState();
   }
@@ -45,20 +51,21 @@ class _ProductLaunchState extends State<ProductLaunch> {
   }
 
   File? _productImage;
+  String? id;
 
   @override
   Widget build(BuildContext context) {
-    tag1Controller.text = '藍色';
-    tag2Controller.text = 'nike';
-    tag3Controller.text = '生活用品';
-    tag4Controller.text = '白色';
-    tags = [
-      tag1Controller.text,
-      tag2Controller.text,
-      tag3Controller.text,
-      tag4Controller.text,
-      tag5Controller.text
-    ];
+    tag1Controller.text = 'Black';
+    tag2Controller.text = 'Exercise';
+    tag3Controller.text = 'Plastic';
+    tag4Controller.text = 'WatterBottle';
+    // tags = [
+    //   tag1Controller.text,
+    //   tag2Controller.text,
+    //   tag3Controller.text,
+    //   tag4Controller.text,
+    //   tag5Controller.text
+    // ];
 
     return Scaffold(
       resizeToAvoidBottomInset: false, // fix the keyboard resize screen issue
@@ -79,7 +86,7 @@ class _ProductLaunchState extends State<ProductLaunch> {
                       height: 40,
                     ),
                     const Text(
-                      '你有料嗎？',
+                      'List & Swap',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -87,14 +94,14 @@ class _ProductLaunchState extends State<ProductLaunch> {
                     ),
                     const SizedBox(height: 10),
                     const Text(
-                      '商品名稱',
+                      'Item',
                       style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 6),
                     TextField(
-                      controller: nameController..text = "環保杯",
+                      controller: nameController..text = "Water Bottle",
                       keyboardType: TextInputType.text,
                       autofocus: true,
                       decoration: InputDecoration(
@@ -113,7 +120,7 @@ class _ProductLaunchState extends State<ProductLaunch> {
                     ),
                     const SizedBox(height: 15),
                     const Text(
-                      'Hashtag',
+                      'Tags',
                       style: TextStyle(
                         fontSize: 16,
                       ),
@@ -136,7 +143,7 @@ class _ProductLaunchState extends State<ProductLaunch> {
                     ),
                     const SizedBox(height: 15),
                     const Text(
-                      '商品照片',
+                      'Photos',
                       style: TextStyle(
                         fontSize: 16,
                       ),
@@ -176,7 +183,7 @@ class _ProductLaunchState extends State<ProductLaunch> {
                                   setState(() {
                                     _productImage = image;
                                   });
-                                },
+                                },onInsertId: (id) {}
                               ),
                             ),
                           );
@@ -196,7 +203,17 @@ class _ProductLaunchState extends State<ProductLaunch> {
                 ElevatedButton(
                   onPressed: () {
                     //tags.add(TagTextField.getTagController());
-                    _insertData(nameController.text, tags);
+                    _updateData(id!, nameController.text, [
+                      tag1Controller.text,
+                      tag2Controller.text,
+                      tag3Controller.text,
+                      tag4Controller.text,
+                      tag5Controller.text
+                    ]);
+                    Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Navigation()));
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
@@ -210,7 +227,7 @@ class _ProductLaunchState extends State<ProductLaunch> {
                     ),
                   ),
                   child: const Text(
-                    '上架',
+                    'List',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -225,10 +242,12 @@ class _ProductLaunchState extends State<ProductLaunch> {
     );
   }
 
-  Future<void> _insertData(String name, List<String> tag) async {
-    //var _id = M.ObjectId(); //use foe unique ID
-    final data = MongodbModel(name: name, tag: tag);
-    var result = await MongoDatabase.insert(data);
+  Future<void> _updateData(String id, String name, List<String> tags) async {
+    //var _id = M.ObjectId(); //use for unique ID
+    //final data = MongoDbModel(id:id, owner: owner, name: name, tag: tag, image: []);
+    var result = await MongoDatabase.update(id, name, tags);
+    print('id: $id');
+    print('result底加: $result');
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         duration: Duration(seconds: 3),

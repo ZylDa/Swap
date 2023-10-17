@@ -41,6 +41,8 @@ dependencies:
   card_swiper: ^3.0.1
   flutter_swiper_plus: ^2.0.4
   carousel_slider: ^4.2.1
+  flutter_native_splash: ^2.3.3
+  
   
 dev_dependencies:
   flutter_test:
@@ -52,6 +54,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -87,6 +90,9 @@ flutter:
    - assets/images/mandy.png
    - assets/images/doll.png
 
+flutter_native_splash:
+  color: "#EAE8DB"
+  image: assets/images/dog.jpeg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -111,6 +117,7 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+  
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -1,35 +1,42 @@
 // To parse this JSON data, do
 //
-//     final mongodbModel = mongodbModelFromJson(jsonString);
+//     final mongoDbModel = mongoDbModelFromJson(jsonString);
 
 import 'dart:convert';
 
-MongodbModel mongodbModelFromJson(String str) =>
-    MongodbModel.fromJson(json.decode(str));
+MongoDbModel mongoDbModelFromJson(String str) =>
+    MongoDbModel.fromJson(json.decode(str));
 
-String mongodbModelToJson(MongodbModel data) => json.encode(data.toJson());
+String mongoDbModelToJson(MongoDbModel data) => json.encode(data.toJson());
 
-class MongodbModel {
-  //String id;
+class MongoDbModel {
+  String id;
+  String owner;
   String name;
   List<String> tag;
+  String image;
 
-  MongodbModel({
-    //required this.id,
+  MongoDbModel({
+    required this.id,
+    required this.owner,
     required this.name,
     required this.tag,
+    required this.image,
   });
 
-  factory MongodbModel.fromJson(Map<String, dynamic> json) => MongodbModel(
-        //id: json["id"],
+  factory MongoDbModel.fromJson(Map<String, dynamic> json) => MongoDbModel(
+        id: json["_id"],
+        owner: json["owner"],
         name: json["name"],
         tag: List<String>.from(json["tag"].map((x) => x)),
+        image: json["照片base64"],
       );
 
   Map<String, dynamic> toJson() => {
-        //"id": id,
+        "_id": id,
+        "owner": owner,
         "name": name,
         "tag": List<dynamic>.from(tag.map((x) => x)),
+        "照片base64": image,
       };
 }
-

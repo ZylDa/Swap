@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:swap/mongodb/database_helper.dart';
 import 'package:swap/navigation.dart';
+import 'package:swap/screens/exchange_request_page.dart';
 import 'package:swap/size_config.dart';
 import 'package:swap/components/loading.dart';
 import 'package:swap/mongo_auth/login_page.dart';
+import '../notification.dart';
 
-import '../widgets/build_personal_card.dart';
+import '../widgets/build_item_card.dart';
 
 class PersonalPage extends StatefulWidget {
   const PersonalPage({Key? key}) : super(key: key);
@@ -59,14 +61,6 @@ class _PersonalPageState extends State<PersonalPage> {
     }
   }
 
-  void _showNotification(BuildContext context) {
-    const snackBar = SnackBar(
-      content: Text('This is notification'),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   void _showSettingsMenu(BuildContext context) {
     showMenu(
       context: context,
@@ -113,15 +107,13 @@ class _PersonalPageState extends State<PersonalPage> {
         //底色
         Expanded(
           child: Container(
-            //width: 390,
             width: SizeConfig.screenWidth,
-            //height: 722,
             height: SizeConfig.screenHeight,
             clipBehavior: Clip.antiAlias,
             decoration: const ShapeDecoration(
               color: Color(0xFFE9E8DB),
-              shape: RoundedRectangleBorder(side: BorderSide(width: 1)),
-              shadows: [
+              shape: RoundedRectangleBorder(side: BorderSide(width: 0)),
+              /*shadows: [
                 BoxShadow(
                   color: Color(0x3F000000),
                   blurRadius: 4,
@@ -129,13 +121,14 @@ class _PersonalPageState extends State<PersonalPage> {
                   spreadRadius: 0,
                 )
               ],
+              */
             ),
             child: Stack(
               //圖層2(Icon)
               children: [
                 Positioned(
-                  top: 80, // 调整垂直位置
-                  left: 30, // 调整水平位置
+                  top: 80,
+                  left: 30,
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
@@ -171,7 +164,14 @@ class _PersonalPageState extends State<PersonalPage> {
                     icon: const Icon(Icons.notifications),
                     color: Colors.black,
                     onPressed: () {
-                      _showNotification(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) {
+                            return NotificationWidget();
+                          },
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -189,18 +189,23 @@ class _PersonalPageState extends State<PersonalPage> {
                 ),
                 //白色區域
                 Container(
-                    //width: 389,
                     width: SizeConfig.screenWidth,
-                    //height: 575,
-                    //height = screeenheight -147
                     height: SizeConfig.screenHeight,
                     margin: const EdgeInsets.only(top: 147),
-                    decoration: const ShapeDecoration(
+                    decoration: BoxDecoration(
                       color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.only(topLeft: Radius.circular(45)),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2), // 陰影的顏色和透明度
+                          spreadRadius: 1, // 陰影擴散的範圍
+                          blurRadius: 3, // 陰影模糊的程度
+                          offset: const Offset(0, 3), // 陰影的偏移量
+                        ),
+                      ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,6 +234,16 @@ class _PersonalPageState extends State<PersonalPage> {
                               return buildItemCard(
                                 itemName: itemName,
                                 imageBase64: imageBase64,
+                                onTap: () {
+                                  // 在這裡導航到交換申請頁面
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ExchangeRequestPage(
+                                          itemName: itemName),
+                                    ),
+                                  );
+                                },
                               );
                             }).toList(),
                           ),
@@ -259,6 +274,16 @@ class _PersonalPageState extends State<PersonalPage> {
                               return buildItemCard(
                                 itemName: itemName,
                                 imageBase64: imageBase64,
+                                onTap: () {
+                                  // 在這裡導航到交換申請頁面
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ExchangeRequestPage(
+                                          itemName: itemName),
+                                    ),
+                                  );
+                                },
                               );
                             }).toList(),
                           ),

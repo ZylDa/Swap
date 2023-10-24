@@ -52,8 +52,8 @@ class ItemSelectorState extends State<ItemSelector> {
         );
 
         return Container(
-          width: 75, // 設定圖片寬度
-          height: 75, // 設定圖片高度
+          width: 75,
+          height: 75,
           margin: const EdgeInsets.symmetric(horizontal: 15),
           child: ClipOval(
             child: image,

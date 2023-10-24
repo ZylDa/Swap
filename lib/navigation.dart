@@ -30,6 +30,7 @@ class _NavigationState extends State<Navigation> {
 
   int currentPageIndex = 0;
   File? _capturedImage;
+  String? _id;
 
   //final _imageInputKey = GlobalKey<_ImageInputState>();
   //void takePicture() {
@@ -67,7 +68,7 @@ class _NavigationState extends State<Navigation> {
       ),
       body: <Widget>[
         const ExchangeScreen(),
-        ProductLaunch(capturedImage: _capturedImage),
+        ProductLaunch(capturedImage: _capturedImage, id: _id),
         //Container(
         //  color: const Color.fromRGBO(12, 59, 46, 1),
         //  alignment: Alignment.center,
@@ -84,30 +85,37 @@ class _NavigationState extends State<Navigation> {
   }
 
   void _takePicture() async {
-    File? imageFile = await Navigator.push(
+    //File? imageFile =
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ImageInput(
+          onInsertId: _onInsertId,
           onPictureTaken: (image) => _onPictureTaken(image),
         ),
       ),
     );
 
-    if (imageFile != null) {
-      setState(() {
-        _capturedImage = imageFile;
-        currentPageIndex = 1; // Navigate to the "Add" tab
-      });
-    }
+    // if (imageFile != null) {
+    //   setState(() {
+    //     _capturedImage = imageFile;
+    //     currentPageIndex = 1; // Navigate to the "Add" tab
+    //   });
+    // }
+  }
+
+  void _onInsertId(String id) {
+    _id = id;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            ProductLaunch(capturedImage: _capturedImage, id: _id),
+      ),
+    );
   }
 
   void _onPictureTaken(File image) {
     _capturedImage = image;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ProductLaunch(capturedImage: _capturedImage),
-      ),
-    );
   }
 }

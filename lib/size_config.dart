@@ -15,18 +15,17 @@ class SizeConfig {
   }
 }
 
-// Get the proportionate height as per screen size
-double? getProportionateScreenHeight(double inputHeight) {
+double getProportionateScreenHeight(double inputHeight) {
   double? screenHeight = SizeConfig.screenHeight;
-  // 844 is the layout height that designer use
-  return (inputHeight / 844.0) * screenHeight!;
+  // 如果 screenHeight 為 null，則回傳一個預設值，或者你可以採取其他處理方式
+  return (inputHeight / 844.0) * (screenHeight ?? 0);
 }
 
 // Get the proportionate height as per screen size
 double getProportionateScreenWidth(double inputWidth) {
   double? screenWidth = SizeConfig.screenWidth;
-  // 390 is the layout width that designer use
-  return (inputWidth / 390.0) * screenWidth!;
+  // 390 is the layout width that designer use (iphone 14)
+  return (inputWidth / 390.0) * (screenWidth ?? 0);
 }
 
 // For add free space vertically (間距)

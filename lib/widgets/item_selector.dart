@@ -75,29 +75,57 @@ class ItemSelectorState extends State<ItemSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: SizeConfig.screenWidth,
-      height: 85,
-      child: Stack(
-        children: <Widget>[
-          Center(
-            child: Container(
-              width: 85,
-              height: 85,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: const Color.fromARGB(255, 196, 194, 178),
-                  width: 3.0,
+    if (getUserEmail() != null) {
+      return SizedBox(
+        width: SizeConfig.screenWidth,
+        height: 85,
+        child: Stack(
+          children: <Widget>[
+            Center(
+              child: Container(
+                width: 85,
+                height: 85,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 196, 194, 178),
+                    width: 3.0,
+                  ),
                 ),
               ),
             ),
-          ),
-          Center(
-            child: carouselSlider ?? const SizedBox(), // 使用已創建的 carouselSlider
-          ),
-        ],
-      ),
-    );
+            Center(
+              child:
+                  carouselSlider ?? const SizedBox(), // 使用已創建的 carouselSlider
+            ),
+          ],
+        ),
+      );
+    } else {
+      return SizedBox(
+        width: SizeConfig.screenWidth,
+        height: 85,
+        child: const Column(
+          children: [
+            Text(
+              'No items yet.',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontFamily: 'basic',
+              ),
+            ),
+            Text(
+              'Add items that you don\'t need then exchange with others!',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+                fontFamily: 'basic',
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

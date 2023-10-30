@@ -87,7 +87,7 @@ class ExchangeRequestPage extends StatelessWidget {
                           ),
                           ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: 5,
+                            itemCount: 3,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               return RequestCard(

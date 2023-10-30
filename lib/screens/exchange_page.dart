@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:swap/navigation.dart';
@@ -20,17 +24,16 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
   List<String> othersItemImages = [];
   List<String> othersItemOwner = [];
   List<List<String>> othersItemTags = [];
+  List<Uint8List> othersItemImagesBytes = [];
 
   @override
   void initState() {
     super.initState();
-    // 在初始化时从数据库获取物品名称、图片、品牌名和颜色
     fetchItemInfoExchange();
   }
 
   Future<void> fetchItemInfoExchange() async {
-    // 获取当前用户的email
-    String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
+    String currentUserEmail = (await getUserEmail()) ?? '';
     List<String> names = await DatabaseHelper().fetchItemNames();
     List<String> images = await DatabaseHelper().fetchItemImages();
     List<String> logos = await DatabaseHelper().fetchItemLogo();
@@ -39,23 +42,26 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
 
     List<List<String>> tags = [];
 
-    // 合并品牌名和颜色为标签
     for (int i = 0; i < logos.length; i++) {
-      List<String> combinedTags = [logos[i], ...colors[i]]; // 合并品牌名和颜色
+      List<String> combinedTags = [logos[i], ...colors[i]];
       tags.add(combinedTags);
     }
 
-    // 過濾"其他人的物品"
     List<int> othersItemIndices = List.generate(owners.length, (index) => index)
         .where((index) => owners[index] != currentUserEmail)
         .toList();
+
+    List<Uint8List> imagesBytes =
+        await Future.wait(images.map((imageBase64) async {
+      return await decodeImage(imageBase64);
+    }));
 
     if (mounted) {
       setState(() {
         othersItemNames =
             othersItemIndices.map((index) => names[index]).toList();
-        othersItemImages =
-            othersItemIndices.map((index) => images[index]).toList();
+        othersItemImages = images;
+        othersItemImagesBytes = imagesBytes;
         othersItemOwner =
             othersItemIndices.map((index) => owners[index]).toList();
         othersItemTags = tags;
@@ -100,12 +106,12 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
               itemCount: othersItemNames.length,
               itemBuilder: (BuildContext context, int index) {
                 String itemName = othersItemNames[index];
-                String imageBase64 = othersItemImages[index];
+                Uint8List imageBytes = othersItemImagesBytes[index];
                 String itemOwner = othersItemOwner[index];
                 List<String> tags = othersItemTags[index];
 
-                return buildCard(
-                  imageBase64: imageBase64,
+                return BuildCard(
+                  imageBytes: imageBytes,
                   ownerName: itemOwner,
                   itemName: itemName,
                   tags: tags,
@@ -123,5 +129,18 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
         ],
       ),
     );
+  }
+
+  Future<Uint8List> decodeImage(String imageBase64) async {
+    try {
+      return base64Decode(imageBase64);
+    } catch (error) {
+      print('Error decoding image: $error');
+      return Uint8List(0); // 返回空的 Uint8List，以避免在图像无效时出现问题
+    }
+  }
+
+  static Uint8List _decodeImage(String imageBase64) {
+    return base64Decode(imageBase64);
   }
 }

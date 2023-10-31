@@ -55,7 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     final db = await Db.create(
-        'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/test?retryWrites=true&w=majority');
+        'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
     await db.open();
 
     final users = db.collection('users');

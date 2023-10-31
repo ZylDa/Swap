@@ -8,7 +8,7 @@ class DatabaseHelper {
     final db = await Db.create(
         'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
     await db.open();
-    final collection = db.collection('huatest64');
+    final collection = db.collection('items');
     final items = await collection.find().toList();
     await db.close();
     return items.map((item) => item['物品名稱'] as String).toList();
@@ -19,7 +19,7 @@ class DatabaseHelper {
     final db = await Db.create(
         'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
     await db.open();
-    final collection = db.collection('huatest64');
+    final collection = db.collection('items');
     final items = await collection.find().toList();
     await db.close();
     return items.map((item) => item['照片base64'] as String).toList();
@@ -30,7 +30,7 @@ class DatabaseHelper {
     final db = await Db.create(
         'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
     await db.open();
-    final collection = db.collection('huatest64');
+    final collection = db.collection('items');
     final items = await collection.find().toList();
     await db.close();
     return items.map((item) => item['logo'] as String).toList();
@@ -41,7 +41,7 @@ class DatabaseHelper {
     final db = await Db.create(
         'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
     await db.open();
-    final collection = db.collection('huatest64');
+    final collection = db.collection('items');
     final items = await collection.find().toList();
     await db.close();
 
@@ -57,7 +57,7 @@ class DatabaseHelper {
     final db = await Db.create(
         'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
     await db.open();
-    final collection = db.collection('huatest64');
+    final collection = db.collection('items');
     final items = await collection.find().toList();
     await db.close();
     return items.map((item) => item['owner'] as String).toList();
@@ -68,7 +68,7 @@ class DatabaseHelper {
     final db = await Db.create(
         'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
     await db.open();
-    final collection = db.collection('huatest64');
+    final collection = db.collection('items');
     final items = await collection.find({'owner': ownerEmail}).toList();
     await db.close();
     return items.map((item) => item['照片base64'] as String).toList();

@@ -9,7 +9,7 @@ import 'package:swap/size_config.dart';
 
 class ItemSelector extends StatefulWidget {
   const ItemSelector({super.key, required this.handleExchangeRequest});
-  final Function(int) handleExchangeRequest; // 回調函數來處理交換請求
+  final Function(String) handleExchangeRequest; // 回調函數來處理交換請求
 
   @override
   ItemSelectorState createState() => ItemSelectorState();
@@ -17,7 +17,7 @@ class ItemSelector extends StatefulWidget {
 
 class ItemSelectorState extends State<ItemSelector> {
   List<String> myItemImages = [];
-  List<int> myItemIds = [];
+  List<String> myItemIds = [];
   CarouselSlider? carouselSlider;
 
   int currentIndex = 0;
@@ -35,7 +35,7 @@ class ItemSelectorState extends State<ItemSelector> {
     final dbHelper = DatabaseHelper();
     List<String> images =
         await DatabaseHelper().fetchItemImageByOwner(currentUserEmail);
-    List<int> itemIds = await dbHelper.fetchItemIdsByOwner(currentUserEmail);
+    List<String> itemIds = await dbHelper.fetchItemIdsByOwner(currentUserEmail);
 
     if (mounted) {
       setState(() {

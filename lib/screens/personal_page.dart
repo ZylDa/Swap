@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:swap/mongodb/database_helper.dart';
 import 'package:swap/navigation.dart';
@@ -233,14 +236,23 @@ class _PersonalPageState extends State<PersonalPage> {
 
                               return buildItemCard(
                                 itemName: itemName,
-                                imageBase64: imageBase64,
+                                decodedImage: Image.memory(
+                                  Uint8List.fromList(base64Decode(imageBase64)),
+                                  fit: BoxFit.contain,
+                                ),
                                 onTap: () {
                                   // 在這裡導航到交換申請頁面
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ExchangeRequestPage(
-                                          itemName: itemName),
+                                        itemName: itemName,
+                                        decodedImage: Image.memory(
+                                          Uint8List.fromList(
+                                              base64Decode(imageBase64)),
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
                                     ),
                                   );
                                 },
@@ -273,14 +285,23 @@ class _PersonalPageState extends State<PersonalPage> {
 
                               return buildItemCard(
                                 itemName: itemName,
-                                imageBase64: imageBase64,
+                                decodedImage: Image.memory(
+                                  Uint8List.fromList(base64Decode(imageBase64)),
+                                  fit: BoxFit.contain,
+                                ),
                                 onTap: () {
                                   // 在這裡導航到交換申請頁面
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ExchangeRequestPage(
-                                          itemName: itemName),
+                                        itemName: itemName,
+                                        decodedImage: Image.memory(
+                                          Uint8List.fromList(
+                                              base64Decode(imageBase64)),
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
                                     ),
                                   );
                                 },

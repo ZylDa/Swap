@@ -10,6 +10,7 @@ class BuildCard extends StatelessWidget {
   final String ownerName;
   final String itemName;
   final List<String> tags;
+  final VoidCallback onExchangePressed;
 
   const BuildCard({
     Key? key,
@@ -17,6 +18,7 @@ class BuildCard extends StatelessWidget {
     required this.ownerName,
     required this.itemName,
     required this.tags,
+    required this.onExchangePressed,
   }) : super(key: key);
 
   @override
@@ -54,10 +56,13 @@ class BuildCard extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            Container(
-              width: 270,
-              height: 270,
-              child: image,
+            GestureDetector(
+              onTap: onExchangePressed,
+              child: Container(
+                width: 270,
+                height: 270,
+                child: image,
+              ),
             ),
             const SizedBox(
               height: 15,

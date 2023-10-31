@@ -69,6 +69,24 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
     }
   }
 
+  void handleExchangeRequest(int itemIndex) async {
+    // 获取当前用户的email
+    String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
+    String itemID = ''; // 你需要提供正确的itemID
+    String recipientEmail = ''; // 你需要提供正确的recipientEmail
+
+    // 调用处理交换请求的方法
+    await DatabaseHelper()
+        .writeExchangeRequest(itemID, currentUserEmail, recipientEmail);
+
+    // 其他处理逻辑，例如显示确认消息
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Exchange request sent successfully!'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,6 +133,11 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                   ownerName: itemOwner,
                   itemName: itemName,
                   tags: tags,
+                  onExchangePressed: () {
+                    // 调用处理交换请求的方法
+                    //String itemID = getCorrectItemID(index);
+                    handleExchangeRequest(index);
+                  },
                 );
               },
               layout: SwiperLayout.TINDER,
@@ -122,9 +145,11 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
               itemHeight: 500,
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(bottom: 5.0),
-            child: ItemSelector(),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5.0),
+            child: ItemSelector(
+              handleExchangeRequest: handleExchangeRequest,
+            ),
           ),
         ],
       ),

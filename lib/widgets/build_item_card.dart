@@ -1,17 +1,17 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
 Widget buildItemCard({
   required String itemName,
-  required String imageBase64,
+  required Image decodedImage, // 直接使用Image類型
   required VoidCallback onTap,
 }) {
+  /*
   List<int> imageBytes = base64Decode(imageBase64);
   Image image = Image.memory(
     Uint8List.fromList(imageBytes),
     fit: BoxFit.contain,
   );
+  */
 
   return GestureDetector(
     onTap: onTap,
@@ -49,7 +49,7 @@ Widget buildItemCard({
                     topRight: Radius.circular(10),
                   ),
                 ),
-                child: image,
+                child: decodedImage,
               ),
               SizedBox(
                 width: 128,

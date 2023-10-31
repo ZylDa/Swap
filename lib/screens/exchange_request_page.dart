@@ -1,12 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:swap/size_config.dart';
 import 'package:swap/widgets/build_request_card.dart';
 
 class ExchangeRequestPage extends StatelessWidget {
   final String itemName;
+  final Image decodedImage;
 
-  const ExchangeRequestPage({Key? key, required this.itemName})
-      : super(key: key);
+  const ExchangeRequestPage({
+    Key? key,
+    required this.itemName,
+    required this.decodedImage,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -110,20 +116,19 @@ class ExchangeRequestPage extends StatelessWidget {
                       width: imageWidth,
                       height: imageHeight,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                        image: const DecorationImage(
-                          image: AssetImage('assets/images/dog.jpeg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          borderRadius: BorderRadius.circular(20.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                          image: DecorationImage(
+                            image: decodedImage.image,
+                            fit: BoxFit.cover,
+                          )),
                     ),
                   ),
                 ],

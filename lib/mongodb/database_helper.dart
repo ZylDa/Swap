@@ -89,30 +89,6 @@ class DatabaseHelper {
       'itemID': itemID,
     };
 
-    // 查找当前用户的文档，如果不存在则创建一个新文档
-    final userDoc = await collection.findOne({'owner': currentUserEmail});
-    if (userDoc == null) {
-      final newUserDoc = {
-        'owner': currentUserEmail,
-        'Wishlist': [],
-        'Request': [],
-        'Approve': null,
-      };
-      await collection.insert(newUserDoc);
-    }
-
-    // 查找接收者的文档，如果不存在则创建一个新文档
-    final recipientDoc = await collection.findOne({'owner': recipientEmail});
-    if (recipientDoc == null) {
-      final newRecipientDoc = {
-        'owner': recipientEmail,
-        'Wishlist': [],
-        'Request': [],
-        'Approve': null,
-      };
-      await collection.insert(newRecipientDoc);
-    }
-
     // 更新当前用户的 Wishlist 字段
     final updateCurrentUser = {
       r'$push': {'Wishlist': exchangeRequest},
@@ -138,13 +114,30 @@ class DatabaseHelper {
     await db.close();
   }
 
-  Future<List<int>> fetchItemIdsByOwner(String ownerEmail) async {
+  Future<List<String>> fetchItemIdsByOwner(String ownerEmail) async {
     final db = await Db.create(
         'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
     await db.open();
     final collection = db.collection('huatest64');
     final items = await collection.find({'owner': ownerEmail}).toList();
     await db.close();
-    return items.map((item) => item['_id'] as int).toList();
+    return items.map((item) => item['_id'] as String).toList();
+  }
+
+  Future<String> fetchItemOwnerById(String itemId) async {
+    final db = await Db.create(
+      'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority',
+    );
+    await db.open();
+    final collection = db.collection('huatest64');
+    final item =
+        await collection.findOne(where.id(ObjectId.fromHexString(itemId)));
+    await db.close();
+
+    if (item != null) {
+      return item['owner'] as String;
+    }
+
+    return ''; // 返回空字符串或适当的默认值，表示未找到
   }
 }

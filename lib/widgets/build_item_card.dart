@@ -5,14 +5,6 @@ Widget buildItemCard({
   required Image decodedImage, // 直接使用Image類型
   required VoidCallback onTap,
 }) {
-  /*
-  List<int> imageBytes = base64Decode(imageBase64);
-  Image image = Image.memory(
-    Uint8List.fromList(imageBytes),
-    fit: BoxFit.contain,
-  );
-  */
-
   return GestureDetector(
     onTap: onTap,
     child: Container(

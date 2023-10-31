@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:swap/size_config.dart';
 import 'package:swap/widgets/build_request_card.dart';
@@ -92,7 +90,7 @@ class ExchangeRequestPage extends StatelessWidget {
                             height: 100,
                           ),
                           ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: 3,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {

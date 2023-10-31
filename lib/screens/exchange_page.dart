@@ -69,15 +69,14 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
     }
   }
 
-  void handleExchangeRequest(int itemIndex) async {
-    // 获取当前用户的email
-    String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
-    String itemID = ''; // 你需要提供正确的itemID
-    String recipientEmail = ''; // 你需要提供正确的recipientEmail
+  void handleExchangeRequest(String itemId) async {
+    String currentUserEmail = (await getUserEmail()) ?? '';
+    //String itemId = await DatabaseHelper().fetchItemIdByIndex(itemIndex);
+    String selectedOwner = await DatabaseHelper().fetchItemOwnerById(itemId);
 
     // 调用处理交换请求的方法
     await DatabaseHelper()
-        .writeExchangeRequest(itemID, currentUserEmail, recipientEmail);
+        .writeExchangeRequest(itemId, currentUserEmail, selectedOwner);
 
     // 其他处理逻辑，例如显示确认消息
     ScaffoldMessenger.of(context).showSnackBar(
@@ -134,9 +133,7 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                   itemName: itemName,
                   tags: tags,
                   onExchangePressed: () {
-                    // 调用处理交换请求的方法
-                    //String itemID = getCorrectItemID(index);
-                    handleExchangeRequest(index);
+                    handleExchangeRequest(index as String);
                   },
                 );
               },

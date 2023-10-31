@@ -9,7 +9,7 @@ import 'package:swap/size_config.dart';
 
 class ItemSelector extends StatefulWidget {
   const ItemSelector({super.key, required this.handleExchangeRequest});
-  final Function(int) handleExchangeRequest; // 回調函數來處理交換請求
+  final Function(String) handleExchangeRequest; // 回調函數來處理交換請求
 
   @override
   ItemSelectorState createState() => ItemSelectorState();

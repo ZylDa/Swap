@@ -36,16 +36,16 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
     String currentUserEmail = (await getUserEmail()) ?? '';
     List<String> names = await DatabaseHelper().fetchItemNames();
     List<String> images = await DatabaseHelper().fetchItemImages();
-    List<String> logos = await DatabaseHelper().fetchItemLogo();
+    //List<String> logos = await DatabaseHelper().fetchItemLogo();
     List<String> owners = await DatabaseHelper().fetchItemOwner();
-    List<List<String>> colors = await DatabaseHelper().fetchItemColor();
+    //List<List<String>> colors = await DatabaseHelper().fetchItemColor();
 
-    List<List<String>> tags = [];
+    List<List<String>> tags = await DatabaseHelper().fetchItemTags();
 
-    for (int i = 0; i < logos.length; i++) {
+    /*for (int i = 0; i < logos.length; i++) {
       List<String> combinedTags = [logos[i], ...colors[i]];
       tags.add(combinedTags);
-    }
+    }*/
 
     List<int> othersItemIndices = List.generate(owners.length, (index) => index)
         .where((index) => owners[index] != currentUserEmail)
@@ -60,11 +60,14 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
       setState(() {
         othersItemNames =
             othersItemIndices.map((index) => names[index]).toList();
-        othersItemImages = images;
-        othersItemImagesBytes = imagesBytes;
+        othersItemImages = 
+            othersItemIndices.map((index) => images[index]).toList();
+        othersItemImagesBytes = 
+            othersItemIndices.map((index) => imagesBytes[index]).toList();
         othersItemOwner =
             othersItemIndices.map((index) => owners[index]).toList();
-        othersItemTags = tags;
+        othersItemTags = 
+            othersItemIndices.map((index) => tags[index]).toList();
       });
     }
   }
@@ -133,7 +136,7 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                   itemName: itemName,
                   tags: tags,
                   onExchangePressed: () {
-                    handleExchangeRequest(index as String);
+                    handleExchangeRequest(index.toString());
                   },
                 );
               },

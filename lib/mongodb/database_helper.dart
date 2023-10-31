@@ -25,7 +25,7 @@ class DatabaseHelper {
     return items.map((item) => item['照片base64'] as String).toList();
   }
 
-  //抓取資料庫中的logo
+  /*抓取資料庫中的logo
   Future<List<String>> fetchItemLogo() async {
     final db = await Db.create(
         'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
@@ -50,6 +50,22 @@ class DatabaseHelper {
         items.map((item) => (item['顏色'] as List).cast<String>()).toList();
 
     return colors;
+  }
+    */
+
+  // 抓取資料庫中的tags
+  Future<List<List<String>>> fetchItemTags() async {
+    final db = await Db.create(
+        'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
+    await db.open();
+    final collection = db.collection('items');
+    final items = await collection.find().toList();
+    await db.close();
+
+    List<List<String>> tags =
+        items.map((item) => (item['tags'] as List).cast<String>()).toList();
+
+    return tags;
   }
 
   //抓取資料庫中的owner
@@ -82,7 +98,7 @@ class DatabaseHelper {
     final db = await Db.create(
         'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
     await db.open();
-    final collection = db.collection('huatest64');
+    final collection = db.collection('items');
 
     // 构建交换请求数据
     final exchangeRequest = {
@@ -118,10 +134,10 @@ class DatabaseHelper {
     final db = await Db.create(
         'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
     await db.open();
-    final collection = db.collection('huatest64');
+    final collection = db.collection('items');
     final items = await collection.find({'owner': ownerEmail}).toList();
     await db.close();
-    return items.map((item) => item['_id'] as String).toList();
+    return items.map((item) => item['_id'].toString()).toList();
   }
 
   Future<String> fetchItemOwnerById(String itemId) async {
@@ -129,7 +145,7 @@ class DatabaseHelper {
       'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority',
     );
     await db.open();
-    final collection = db.collection('huatest64');
+    final collection = db.collection('items');
     final item =
         await collection.findOne(where.id(ObjectId.fromHexString(itemId)));
     await db.close();

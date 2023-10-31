@@ -27,6 +27,7 @@ class ItemSelectorState extends State<ItemSelector> {
     super.initState();
     // 在初始化时从数据库获取物品名称、图片、品牌名和颜色
     fetchItemImage();
+    print(getUserEmail());
   }
 
   Future<void> fetchItemImage() async {
@@ -57,13 +58,6 @@ class ItemSelectorState extends State<ItemSelector> {
           Uint8List.fromList(imageBytes),
           fit: BoxFit.cover,
         );
-        //CarouselSlider(
-        //items: myItemImages.map((base64String) {
-        //  List<int> imageBytes = base64Decode(base64String);
-        //  Image image = Image.memory(
-        //    Uint8List.fromList(imageBytes),
-        //    fit: BoxFit.cover,
-        //  );
 
         return GestureDetector(
           onTap: () {

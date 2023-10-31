@@ -40,17 +40,15 @@ class ExchangeRequestPage extends StatelessWidget {
                     top: 50,
                     left: 15,
                     child: IconButton(
+                      iconSize: 30,
                       icon: const Icon(Icons.arrow_back),
-                      style: IconButton.styleFrom(
-                        fixedSize: const Size(40, 40),
-                      ),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
                   ),
                   const Positioned(
-                    top: 100,
+                    top: 105,
                     left: 30,
                     child: Text(
                       'Exchange requests',

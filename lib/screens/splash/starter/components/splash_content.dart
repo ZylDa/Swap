@@ -19,7 +19,7 @@ class SplashContent extends StatelessWidget {
           "Swap-一拍即合",
           style: TextStyle(
             fontSize: getProportionateScreenWidth(36),
-            color: kPrimaryColor,
+            color: kButtonColor,
             fontWeight: FontWeight.bold,
           ),
         ),

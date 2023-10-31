@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:swap/mongodb/database_helper.dart';
 import 'package:swap/navigation.dart';
 import 'package:swap/screens/exchange_request_page.dart';
+import 'package:swap/screens/success_page.dart';
 import 'package:swap/size_config.dart';
 import 'package:swap/components/loading.dart';
 import 'package:swap/mongo_auth/login_page.dart';
@@ -96,6 +97,21 @@ class _PersonalPageState extends State<PersonalPage> {
             onTap: () async {
               LoginPage.logout(context);
               Navigator.pop(context);
+            },
+          ),
+        ),
+        //測試用
+        PopupMenuItem(
+          child: ListTile(
+            leading: const Icon(Icons.check),
+            title: const Text('成功頁'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SuccessPage(),
+                ),
+              );
             },
           ),
         ),

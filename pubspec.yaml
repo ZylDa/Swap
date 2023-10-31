@@ -90,6 +90,7 @@ flutter:
    - assets/images/ryan.png
    - assets/images/mandy.png
    - assets/images/doll.png
+   - assets/images/success.jpg
 
 flutter_native_splash:
   color: "#EAE8DB"

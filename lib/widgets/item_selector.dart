@@ -8,7 +8,8 @@ import 'package:swap/navigation.dart';
 import 'package:swap/size_config.dart';
 
 class ItemSelector extends StatefulWidget {
-  const ItemSelector({super.key});
+  const ItemSelector({super.key, required this.handleExchangeRequest});
+  final Function(int) handleExchangeRequest; // 回調函數來處理交換請求
 
   @override
   ItemSelectorState createState() => ItemSelectorState();
@@ -16,6 +17,7 @@ class ItemSelector extends StatefulWidget {
 
 class ItemSelectorState extends State<ItemSelector> {
   List<String> myItemImages = [];
+  List<int> myItemIds = [];
   CarouselSlider? carouselSlider;
 
   int currentIndex = 0;
@@ -30,12 +32,15 @@ class ItemSelectorState extends State<ItemSelector> {
   Future<void> fetchItemImage() async {
     // 获取当前用户的email
     String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
+    final dbHelper = DatabaseHelper();
     List<String> images =
         await DatabaseHelper().fetchItemImageByOwner(currentUserEmail);
+    List<int> itemIds = await dbHelper.fetchItemIdsByOwner(currentUserEmail);
 
     if (mounted) {
       setState(() {
         myItemImages = images;
+        myItemIds = itemIds;
         // 創建 CarouselSlider
         carouselSlider = createCarouselSlider();
       });
@@ -44,19 +49,36 @@ class ItemSelectorState extends State<ItemSelector> {
 
   CarouselSlider createCarouselSlider() {
     return CarouselSlider(
-      items: myItemImages.map((base64String) {
+      items: myItemImages.asMap().entries.map((entry) {
+        final index = entry.key;
+        final base64String = entry.value;
         List<int> imageBytes = base64Decode(base64String);
         Image image = Image.memory(
           Uint8List.fromList(imageBytes),
           fit: BoxFit.cover,
         );
+        //CarouselSlider(
+        //items: myItemImages.map((base64String) {
+        //  List<int> imageBytes = base64Decode(base64String);
+        //  Image image = Image.memory(
+        //    Uint8List.fromList(imageBytes),
+        //    fit: BoxFit.cover,
+        //  );
 
-        return Container(
-          width: 75,
-          height: 75,
-          margin: const EdgeInsets.symmetric(horizontal: 15),
-          child: ClipOval(
-            child: image,
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              currentIndex = index;
+            });
+            widget.handleExchangeRequest(myItemIds[index]); // 处理交换请求
+          },
+          child: Container(
+            width: 75,
+            height: 75,
+            margin: const EdgeInsets.symmetric(horizontal: 15),
+            child: ClipOval(
+              child: image,
+            ),
           ),
         );
       }).toList(),

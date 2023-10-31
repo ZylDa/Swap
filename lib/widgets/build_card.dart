@@ -10,6 +10,8 @@ Widget buildCard({
   required String ownerName,
   required String itemName,
   required List<String> tags, // 包含品牌名和颜色的标签列表
+  required VoidCallback onExchangePressed,
+  int index = 0,
 }) {
   List<int> imageBytes = base64Decode(imageBase64);
   Image image = Image.memory(
@@ -45,10 +47,13 @@ Widget buildCard({
           const SizedBox(
             height: 15,
           ),
-          Container(
-            width: 270,
-            height: 270,
-            child: image,
+          GestureDetector(
+            onTap: onExchangePressed,
+            child: Container(
+              width: 270,
+              height: 270,
+              child: image,
+            ),
           ),
           const SizedBox(
             height: 15,

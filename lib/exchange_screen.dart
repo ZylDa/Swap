@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:swap/notification.dart';
 
+// NOT USED
+
 class ExchangeScreen extends StatefulWidget {
   const ExchangeScreen({super.key});
 

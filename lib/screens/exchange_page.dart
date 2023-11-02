@@ -4,6 +4,8 @@ import 'package:swap/navigation.dart';
 import '../widgets/build_card.dart';
 import '../widgets/item_selector.dart';
 import '../mongodb/database_helper.dart';
+import 'package:swap/notification.dart';
+
 
 class ExchangeScreen extends StatefulWidget {
   const ExchangeScreen({Key? key}) : super(key: key);
@@ -84,13 +86,7 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                 context,
                 MaterialPageRoute<void>(
                   builder: (BuildContext context) {
-                    return Scaffold(
-                      appBar: AppBar(
-                        backgroundColor:
-                            const Color.fromARGB(255, 196, 194, 178),
-                        title: const Text('Notification'),
-                      ),
-                    );
+                    return NotificationWidget();
                   },
                 ),
               );

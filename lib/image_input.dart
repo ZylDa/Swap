@@ -1,12 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:swap/navigation.dart';
 import 'mongodb/mongodb.dart';
 import 'mongodb/mongodb_model.dart';
-import 'package:mongo_dart/mongo_dart.dart' as M;
+import 'package:mongo_dart/mongo_dart.dart' hide Center, State;
 import 'package:uuid/uuid.dart';
+
 
 class ImageInput extends StatefulWidget {
   final Function(File) onPictureTaken;
@@ -28,6 +29,7 @@ class _ImageInputState extends State<ImageInput> {
 
   @override
   void initState() {
+    //MongoDatabase.changeStreamOG('1');
     super.initState();
     _takePicture(); // Automatically launch the camera on widget initialization
   }
@@ -58,14 +60,17 @@ class _ImageInputState extends State<ImageInput> {
     }
     String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
     final bytes = await _selectedImage!.readAsBytes();
-    final base64Image = base64Encode(bytes);   
+    //final base64Image = base64Encode(bytes);   
+    Uint8List binaryImageData = Uint8List.fromList(bytes);
+    final bsonBinary = BsonBinary.from(binaryImageData);
+
     final uuid = const Uuid().v4(); // 生成一個新的UUID
     final data = MongoDbModel(
-        id: uuid, owner: currentUserEmail, name: "", tag: [], image: base64Image);
+        id: uuid, owner: currentUserEmail, name: "", tag: [], binary: bsonBinary);
     var result = await MongoDatabase.insert(data);
-    print('result在下面');
-    print('result:  $result');
+    print('insert result:  $result');
     widget.onInsertId(uuid);
+    //MongoDatabase.changeStreamOG(uuid);
   }
 
   @override

@@ -372,10 +372,10 @@ packages:
     dependency: "direct main"
     description:
       name: mongo_dart
-      sha256: "81ceb0db689b4d367bbe24904740ba3cc61354adacf6a5ff51f2141b3e3a6dca"
+      sha256: fabc88668e75e0972fd953189ea8b281dacae4f14ecc6f9594c5c21f0aa72efb
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.1"
+    version: "0.9.3"
   mongo_dart_query:
     dependency: transitive
     description:

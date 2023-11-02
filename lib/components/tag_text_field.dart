@@ -12,7 +12,7 @@ class TagTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: const EdgeInsets.only(right: 5),
-        width: 93,
+        width: 110,
         height: 40,
         child: TextField(
           controller: controller,

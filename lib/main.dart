@@ -15,6 +15,7 @@ void runAppWithLoginStatus() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool loggedIn = prefs.getBool('loggedIn') ?? false;
 
+
   runApp(
     MaterialApp(
       title: 'Swap Demo',
@@ -69,7 +70,7 @@ class _MyAppState extends State<_MyApp> {
             } else {
               bool isFirstTimeUser = snapshot.data ?? true;
               return MaterialApp(
-                //debugShowCheckedModeBanner: false,
+                debugShowCheckedModeBanner: false,
                 title: 'Swap Demo',
                 home: isFirstTimeUser
                     ? const SplashScreen()

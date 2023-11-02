@@ -8,6 +8,8 @@ import 'package:swap/screens/exchange_page.dart';
 import 'package:swap/product_launch.dart';
 import 'package:swap/screens/personal_page.dart';
 
+import 'mongodb/mongodb.dart';
+
 Future<String?> getUserEmail() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getString('mail');
@@ -104,18 +106,27 @@ class _NavigationState extends State<Navigation> {
     // }
   }
 
-  void _onInsertId(String id) {
+  Future<void> _onInsertId(String id) async {
     _id = id;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            ProductLaunch(capturedImage: _capturedImage, id: _id),
-      ),
-    );
+    MongoDatabase.changeStream(_id!, _toProduct);
+    // var result = await MongoDatabase.changeStreamOG(_id!, _toProduct);
+    // print('return name: $result[\'name\']');
   }
 
   void _onPictureTaken(File image) {
     _capturedImage = image;
+  }
+
+  void _toProduct(Map map) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProductLaunch(
+            capturedImage: _capturedImage,
+            id: _id,
+            itemName: map['name'],
+            tags: map['tags']),
+      ),
+    );
   }
 }

@@ -1,9 +1,7 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:mongo_dart/mongo_dart.dart' hide State;
 import 'package:swap/navigation.dart';
 import '../widgets/build_card.dart';
 import '../widgets/item_selector.dart';
@@ -21,7 +19,7 @@ class ExchangeScreen extends StatefulWidget {
 
 class _ExchangeScreenState extends State<ExchangeScreen> {
   List<String> othersItemNames = [];
-  List<String> othersItemImages = [];
+  List<BsonBinary> othersItemImages = [];
   List<String> othersItemOwner = [];
   List<List<String>> othersItemTags = [];
   List<Uint8List> othersItemImagesBytes = [];
@@ -35,39 +33,30 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
   Future<void> fetchItemInfoExchange() async {
     String currentUserEmail = (await getUserEmail()) ?? '';
     List<String> names = await DatabaseHelper().fetchItemNames();
-    List<String> images = await DatabaseHelper().fetchItemImages();
-    //List<String> logos = await DatabaseHelper().fetchItemLogo();
+    List<BsonBinary> images = await DatabaseHelper().fetchItemImages();
     List<String> owners = await DatabaseHelper().fetchItemOwner();
-    //List<List<String>> colors = await DatabaseHelper().fetchItemColor();
-
     List<List<String>> tags = await DatabaseHelper().fetchItemTags();
-
-    /*for (int i = 0; i < logos.length; i++) {
-      List<String> combinedTags = [logos[i], ...colors[i]];
-      tags.add(combinedTags);
-    }*/
 
     List<int> othersItemIndices = List.generate(owners.length, (index) => index)
         .where((index) => owners[index] != currentUserEmail)
         .toList();
 
     List<Uint8List> imagesBytes =
-        await Future.wait(images.map((imageBase64) async {
-      return await decodeImage(imageBase64);
+        await Future.wait(images.map((imageBinary) async {
+      return await decodeImage(imageBinary);
     }));
 
     if (mounted) {
       setState(() {
         othersItemNames =
             othersItemIndices.map((index) => names[index]).toList();
-        othersItemImages = 
+        othersItemImages =
             othersItemIndices.map((index) => images[index]).toList();
-        othersItemImagesBytes = 
+        othersItemImagesBytes =
             othersItemIndices.map((index) => imagesBytes[index]).toList();
         othersItemOwner =
             othersItemIndices.map((index) => owners[index]).toList();
-        othersItemTags = 
-            othersItemIndices.map((index) => tags[index]).toList();
+        othersItemTags = othersItemIndices.map((index) => tags[index]).toList();
       });
     }
   }
@@ -156,16 +145,12 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
     );
   }
 
-  Future<Uint8List> decodeImage(String imageBase64) async {
+  Future<Uint8List> decodeImage(BsonBinary imageBinary) async {
     try {
-      return base64Decode(imageBase64);
+      return Uint8List.fromList(imageBinary.byteList);
     } catch (error) {
       print('Error decoding image: $error');
       return Uint8List(0); // 返回空的 Uint8List，以避免在图像无效时出现问题
     }
-  }
-
-  static Uint8List _decodeImage(String imageBase64) {
-    return base64Decode(imageBase64);
   }
 }

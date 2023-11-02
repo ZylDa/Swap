@@ -43,6 +43,7 @@ dependencies:
   carousel_slider: ^4.2.1
   uuid: ^3.0.7
   flutter_native_splash: ^2.3.3
+  bson: ^4.0.0
   
   
 dev_dependencies:
@@ -91,6 +92,10 @@ flutter:
    - assets/images/mandy.png
    - assets/images/doll.png
    - assets/images/success.jpg
+   - assets/images/onboard_1n.png
+   - assets/images/onboard_2.png
+   - assets/images/onboard_3.png
+   - assets/images/onboard_4.png
 
 flutter_native_splash:
   color: "#EAE8DB"

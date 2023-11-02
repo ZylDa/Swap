@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' hide Center, State;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swap/color_constants.dart';
 
 import 'package:swap/components/my_button.dart';
 import 'package:swap/components/my_textfield.dart';
@@ -42,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            backgroundColor: Colors.deepPurple,
+            backgroundColor: kButtonColor,
             title: Center(
               child: Text(
                 message,

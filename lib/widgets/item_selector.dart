@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:bson/bson.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:swap/mongodb/database_helper.dart';
@@ -16,7 +16,7 @@ class ItemSelector extends StatefulWidget {
 }
 
 class ItemSelectorState extends State<ItemSelector> {
-  List<String> myItemImages = [];
+  List<BsonBinary> myItemImages = [];
   List<String> myItemIds = [];
   CarouselSlider? carouselSlider;
 
@@ -27,14 +27,13 @@ class ItemSelectorState extends State<ItemSelector> {
     super.initState();
     // 在初始化时从数据库获取物品名称、图片、品牌名和颜色
     fetchItemImage();
-    print(getUserEmail());
   }
 
   Future<void> fetchItemImage() async {
     // 获取当前用户的email
     String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
     final dbHelper = DatabaseHelper();
-    List<String> images =
+    List<BsonBinary> images =
         await DatabaseHelper().fetchItemImageByOwner(currentUserEmail);
     List<String> itemIds = await dbHelper.fetchItemIdsByOwner(currentUserEmail);
 
@@ -52,8 +51,8 @@ class ItemSelectorState extends State<ItemSelector> {
     return CarouselSlider(
       items: myItemImages.asMap().entries.map((entry) {
         final index = entry.key;
-        final base64String = entry.value;
-        List<int> imageBytes = base64Decode(base64String);
+        final bsonBinary = entry.value;
+        Uint8List imageBytes = Uint8List.fromList(bsonBinary.byteList);
         Image image = Image.memory(
           Uint8List.fromList(imageBytes),
           fit: BoxFit.cover,

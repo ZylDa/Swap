@@ -26,10 +26,12 @@ class SplashContent extends StatelessWidget {
         const VerticalSpacing(of: 16),
         Padding(
           padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(40)),
           child: Text(
             text,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.center,
+            // automatically change lines
+
             style: TextStyle(
               color: kTextColor,
               height: 1.5,

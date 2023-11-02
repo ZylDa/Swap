@@ -17,11 +17,24 @@ class BodyState extends State<Body> {
   int currentPage = 0;
   List<Map<String, String>> splashData = [
     {
-      "text": "歡迎加入Swap計畫，讓我們告訴你怎麼使用吧！",
-      "image": "assets/images/onboard_test_2.jpg"
+      "text":
+          "Welcome to Swap, Let us guide you through! Choose one of your item and click the item above to exchange with.",
+      "image": "assets/images/onboard_1n.png"
     },
-    {"text": "如何上架呢？", "image": "assets/images/onboard_test_1.jpg"},
-    {"text": "如何交換呢？", "image": "assets/images/onboard_test_3.jpg"},
+    {
+      "text":
+          'When you add an item, our system will automatically fill in the information.',
+      "image": 'assets/images/onboard_2.png',
+    },
+    {
+      "text":
+          "Press the 'profile' button below to check your items and items you requested.",
+      "image": "assets/images/onboard_3.png"
+    },
+    {
+      "text": "Press the gear button on the top right to know more!",
+      "image": "assets/images/onboard_4.png"
+    },
   ];
 
   @override

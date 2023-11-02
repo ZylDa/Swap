@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: kButtonColor,
           title: Center(
             child: Text(
               message,

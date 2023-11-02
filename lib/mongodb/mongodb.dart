@@ -18,9 +18,9 @@ class MongoDatabase {
 
 
   static Future<dynamic> insert(MongoDbModel data) async {
-    final db = await Db.create(MONGO_URL);
+    final db = await Db.create(MONGO_URL_HUA);
     await db.open();
-    final collection = db.collection(COLLECTION_NAME);
+    final collection = db.collection(COLLECTION_NAME_HUA);
     //await connect();
     try {
       var result = await collection.insert(data.toJson());
@@ -34,9 +34,9 @@ class MongoDatabase {
   static Future<dynamic> update(
       String id, String name, List<String> tags) async {
     //await connect();
-    final db = await Db.create(MONGO_URL);
+    final db = await Db.create(MONGO_URL_HUA);
     await db.open();
-    final collection = db.collection(COLLECTION_NAME);
+    final collection = db.collection(COLLECTION_NAME_HUA);
     try {
       await collection.update(
           where.eq('_id', id), modify.set('物品名稱', name).set('tags', tags));
@@ -48,9 +48,9 @@ class MongoDatabase {
   }
 
   static Future<void> changeStream(String specificId, Function fun) async {
-    final db = await Db.create(MONGO_URL);
+    final db = await Db.create(MONGO_URL_HUA);
     await db.open();
-    final collection = db.collection(COLLECTION_NAME);
+    final collection = db.collection(COLLECTION_NAME_HUA);
     
     var stream = collection.watch(
       <Map<String, Object>>[

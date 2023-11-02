@@ -1,11 +1,19 @@
+import 'dart:typed_data';
+
+import 'package:bson/bson.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:swap/mongodb/database_helper.dart';
 import 'package:swap/navigation.dart';
+import 'package:swap/screens/exchange_request_page.dart';
+import 'package:swap/screens/splash/splash_screen.dart';
+import 'package:swap/screens/success_page.dart';
 import 'package:swap/size_config.dart';
 import 'package:swap/components/loading.dart';
 import 'package:swap/mongo_auth/login_page.dart';
+import '../notification.dart';
 
-import '../widgets/build_personal_card.dart';
+import '../widgets/build_item_card.dart';
 
 class PersonalPage extends StatefulWidget {
   const PersonalPage({Key? key}) : super(key: key);
@@ -16,18 +24,18 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
   List<String> myItemNames = [];
-  List<String> myItemImages = [];
+  List<BsonBinary> myItemImages = [];
   List<String> wishListNames = [];
-  List<String> wishListImages = [];
+  List<BsonBinary> wishListImages = [];
 
   @override
   void initState() {
     super.initState();
     //placeholders
     myItemNames = List.generate(3, (index) => 'Loading...');
-    myItemImages = List.generate(3, (index) => loadingBase64);
+    myItemImages = List.generate(3, (index) => loadingBinary);
     wishListNames = List.generate(3, (index) => 'Loading...');
-    wishListImages = List.generate(3, (index) => loadingBase64);
+    wishListImages = List.generate(3, (index) => loadingBinary);
     // 在初始化时从数据库获取物品名称、图片、品牌名和颜色
     fetchItemInfoPersonal();
   }
@@ -36,7 +44,7 @@ class _PersonalPageState extends State<PersonalPage> {
     // 获取当前用户的email
     String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
     List<String> names = await DatabaseHelper().fetchItemNames();
-    List<String> images = await DatabaseHelper().fetchItemImages();
+    List<BsonBinary> images = await DatabaseHelper().fetchItemImages();
     List<String> owners = await DatabaseHelper().fetchItemOwner();
 
     // 過濾"我的物品"
@@ -59,14 +67,6 @@ class _PersonalPageState extends State<PersonalPage> {
     }
   }
 
-  void _showNotification(BuildContext context) {
-    const snackBar = SnackBar(
-      content: Text('This is notification'),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   void _showSettingsMenu(BuildContext context) {
     showMenu(
       context: context,
@@ -75,7 +75,7 @@ class _PersonalPageState extends State<PersonalPage> {
         PopupMenuItem(
           child: ListTile(
             leading: const Icon(Icons.history),
-            title: const Text('交換紀錄'),
+            title: const Text('Exchange History'),
             onTap: () {
               // 在這裡執行交換紀錄的操作
               Navigator.pop(context);
@@ -85,25 +85,72 @@ class _PersonalPageState extends State<PersonalPage> {
         PopupMenuItem(
           child: ListTile(
             leading: const Icon(Icons.mail),
-            title: const Text('聯絡我們'),
+            title: const Text('Contact Us'),
             onTap: () {
               // 在這裡執行聯絡我們的操作
               Navigator.pop(context);
             },
           ),
         ),
+        //重看教學頁
+        PopupMenuItem(
+          child: ListTile(
+            leading: const Icon(Icons.help),
+            title: const Text('Guidelines'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SplashScreen(),
+                ),
+              );
+            },
+          ),
+        ),
         PopupMenuItem(
           child: ListTile(
             leading: const Icon(Icons.logout),
-            title: const Text('登出'),
+            title: const Text('Logout'),
             onTap: () async {
               LoginPage.logout(context);
               Navigator.pop(context);
             },
           ),
         ),
+        /*測試用
+        PopupMenuItem(
+          child: ListTile(
+            leading: const Icon(Icons.check),
+            title: const Text('成功頁'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SuccessPage(),
+                ),
+              );
+            },
+          ),
+        ),
+        */
       ],
     );
+  }
+
+  Future<BsonBinary> gifToBsonBinary() async {
+    // 加载 GIF 文件
+    ByteData data =
+        await rootBundle.load('assets/images/Double Ring-1s-128px.gif');
+
+    // 转换为 Uint8List
+    Uint8List gifBytes = data.buffer.asUint8List();
+
+    // 创建 BsonBinary 对象
+    BsonBinary loadingBsonBinary = BsonBinary.from(
+      gifBytes,
+    );
+
+    return loadingBsonBinary;
   }
 
   @override
@@ -113,29 +160,19 @@ class _PersonalPageState extends State<PersonalPage> {
         //底色
         Expanded(
           child: Container(
-            //width: 390,
             width: SizeConfig.screenWidth,
-            //height: 722,
             height: SizeConfig.screenHeight,
             clipBehavior: Clip.antiAlias,
             decoration: const ShapeDecoration(
               color: Color(0xFFE9E8DB),
-              shape: RoundedRectangleBorder(side: BorderSide(width: 1)),
-              shadows: [
-                BoxShadow(
-                  color: Color(0x3F000000),
-                  blurRadius: 4,
-                  offset: Offset(0, 4),
-                  spreadRadius: 0,
-                )
-              ],
+              shape: RoundedRectangleBorder(side: BorderSide(width: 0)),
             ),
             child: Stack(
               //圖層2(Icon)
               children: [
                 Positioned(
-                  top: 80, // 调整垂直位置
-                  left: 30, // 调整水平位置
+                  top: 80,
+                  left: 30,
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
@@ -171,7 +208,14 @@ class _PersonalPageState extends State<PersonalPage> {
                     icon: const Icon(Icons.notifications),
                     color: Colors.black,
                     onPressed: () {
-                      _showNotification(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) {
+                            return NotificationWidget();
+                          },
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -189,18 +233,23 @@ class _PersonalPageState extends State<PersonalPage> {
                 ),
                 //白色區域
                 Container(
-                    //width: 389,
                     width: SizeConfig.screenWidth,
-                    //height: 575,
-                    //height = screeenheight -147
                     height: SizeConfig.screenHeight,
                     margin: const EdgeInsets.only(top: 147),
-                    decoration: const ShapeDecoration(
+                    decoration: BoxDecoration(
                       color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.only(topLeft: Radius.circular(45)),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2), // 陰影的顏色和透明度
+                          spreadRadius: 1, // 陰影擴散的範圍
+                          blurRadius: 3, // 陰影模糊的程度
+                          offset: const Offset(0, 3), // 陰影的偏移量
+                        ),
+                      ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,12 +272,33 @@ class _PersonalPageState extends State<PersonalPage> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: myItemNames.map((itemName) {
-                              String imageBase64 =
+                              BsonBinary bsonBinary =
                                   myItemImages[myItemNames.indexOf(itemName)];
+
+                              Uint8List imageBytes =
+                                  Uint8List.fromList(bsonBinary.byteList);
 
                               return buildItemCard(
                                 itemName: itemName,
-                                imageBase64: imageBase64,
+                                decodedImage: Image.memory(
+                                  imageBytes,
+                                  fit: BoxFit.contain,
+                                ),
+                                onTap: () {
+                                  // 在這裡導航到交換申請頁面
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ExchangeRequestPage(
+                                        itemName: itemName,
+                                        decodedImage: Image.memory(
+                                          imageBytes,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             }).toList(),
                           ),
@@ -254,11 +324,32 @@ class _PersonalPageState extends State<PersonalPage> {
                                 wishListNames.asMap().entries.map((entry) {
                               int index = entry.key;
                               String itemName = entry.value;
-                              String imageBase64 = wishListImages[index];
+                              BsonBinary bsonBinary = wishListImages[index];
+
+                              Uint8List imageBytes =
+                                  Uint8List.fromList(bsonBinary.byteList);
 
                               return buildItemCard(
                                 itemName: itemName,
-                                imageBase64: imageBase64,
+                                decodedImage: Image.memory(
+                                  imageBytes,
+                                  fit: BoxFit.contain,
+                                ),
+                                onTap: () {
+                                  // 在這裡導航到交換申請頁面
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ExchangeRequestPage(
+                                        itemName: itemName,
+                                        decodedImage: Image.memory(
+                                          imageBytes,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             }).toList(),
                           ),

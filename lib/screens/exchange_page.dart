@@ -1,11 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:mongo_dart/mongo_dart.dart' hide State;
 import 'package:swap/navigation.dart';
 import '../widgets/build_card.dart';
 import '../widgets/item_selector.dart';
 import '../mongodb/database_helper.dart';
-import 'package:swap/notification.dart';
-
+import '../notification.dart';
 
 class ExchangeScreen extends StatefulWidget {
   const ExchangeScreen({Key? key}) : super(key: key);
@@ -18,38 +19,32 @@ class ExchangeScreen extends StatefulWidget {
 
 class _ExchangeScreenState extends State<ExchangeScreen> {
   List<String> othersItemNames = [];
-  List<String> othersItemImages = [];
+  List<BsonBinary> othersItemImages = [];
   List<String> othersItemOwner = [];
   List<List<String>> othersItemTags = [];
+  List<Uint8List> othersItemImagesBytes = [];
 
   @override
   void initState() {
     super.initState();
-    // 在初始化时从数据库获取物品名称、图片、品牌名和颜色
     fetchItemInfoExchange();
   }
 
   Future<void> fetchItemInfoExchange() async {
-    // 获取当前用户的email
-    String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
+    String currentUserEmail = (await getUserEmail()) ?? '';
     List<String> names = await DatabaseHelper().fetchItemNames();
-    List<String> images = await DatabaseHelper().fetchItemImages();
-    List<String> logos = await DatabaseHelper().fetchItemLogo();
+    List<BsonBinary> images = await DatabaseHelper().fetchItemImages();
     List<String> owners = await DatabaseHelper().fetchItemOwner();
-    List<List<String>> colors = await DatabaseHelper().fetchItemColor();
+    List<List<String>> tags = await DatabaseHelper().fetchItemTags();
 
-    List<List<String>> tags = [];
-
-    // 合并品牌名和颜色为标签
-    for (int i = 0; i < logos.length; i++) {
-      List<String> combinedTags = [logos[i], ...colors[i]]; // 合并品牌名和颜色
-      tags.add(combinedTags);
-    }
-
-    // 過濾"其他人的物品"
     List<int> othersItemIndices = List.generate(owners.length, (index) => index)
         .where((index) => owners[index] != currentUserEmail)
         .toList();
+
+    List<Uint8List> imagesBytes =
+        await Future.wait(images.map((imageBinary) async {
+      return await decodeImage(imageBinary);
+    }));
 
     if (mounted) {
       setState(() {
@@ -57,11 +52,30 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
             othersItemIndices.map((index) => names[index]).toList();
         othersItemImages =
             othersItemIndices.map((index) => images[index]).toList();
+        othersItemImagesBytes =
+            othersItemIndices.map((index) => imagesBytes[index]).toList();
         othersItemOwner =
             othersItemIndices.map((index) => owners[index]).toList();
-        othersItemTags = tags;
+        othersItemTags = othersItemIndices.map((index) => tags[index]).toList();
       });
     }
+  }
+
+  void handleExchangeRequest(String itemId) async {
+    String currentUserEmail = (await getUserEmail()) ?? '';
+    //String itemId = await DatabaseHelper().fetchItemIdByIndex(itemIndex);
+    String selectedOwner = await DatabaseHelper().fetchItemOwnerById(itemId);
+
+    // 调用处理交换请求的方法
+    await DatabaseHelper()
+        .writeExchangeRequest(itemId, currentUserEmail, selectedOwner);
+
+    // 其他处理逻辑，例如显示确认消息
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Exchange request sent successfully!'),
+      ),
+    );
   }
 
   @override
@@ -101,15 +115,18 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
               itemCount: othersItemNames.length,
               itemBuilder: (BuildContext context, int index) {
                 String itemName = othersItemNames[index];
-                String imageBase64 = othersItemImages[index];
+                Uint8List imageBytes = othersItemImagesBytes[index];
                 String itemOwner = othersItemOwner[index];
                 List<String> tags = othersItemTags[index];
 
-                return buildCard(
-                  imageBase64: imageBase64,
+                return BuildCard(
+                  imageBytes: imageBytes,
                   ownerName: itemOwner,
                   itemName: itemName,
                   tags: tags,
+                  onExchangePressed: () {
+                    handleExchangeRequest(index.toString());
+                  },
                 );
               },
               layout: SwiperLayout.TINDER,
@@ -117,12 +134,23 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
               itemHeight: 500,
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(bottom: 5.0),
-            child: ItemSelector(),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5.0),
+            child: ItemSelector(
+              handleExchangeRequest: handleExchangeRequest,
+            ),
           ),
         ],
       ),
     );
+  }
+
+  Future<Uint8List> decodeImage(BsonBinary imageBinary) async {
+    try {
+      return Uint8List.fromList(imageBinary.byteList);
+    } catch (error) {
+      print('Error decoding image: $error');
+      return Uint8List(0); // 返回空的 Uint8List，以避免在图像无效时出现问题
+    }
   }
 }

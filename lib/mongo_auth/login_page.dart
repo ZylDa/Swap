@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' hide Center, State;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swap/color_constants.dart';
 
 import 'package:swap/components/my_button.dart';
 import 'package:swap/components/my_textfield.dart';
@@ -37,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: kButtonColor,
           title: Center(
             child: Text(
               message,
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<bool> login(String mail, String password) async {
     showLoadingDialog();
     final db = await Db.create(
-        'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/test?retryWrites=true&w=majority');
+        'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
     await db.open();
 
     final users = db.collection('users');

@@ -15,6 +15,7 @@ void runAppWithLoginStatus() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool loggedIn = prefs.getBool('loggedIn') ?? false;
 
+
   runApp(
     MaterialApp(
       title: 'Swap Demo',

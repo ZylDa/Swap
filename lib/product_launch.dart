@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'mongodb/mongodb_model.dart';
 import 'mongodb/mongodb.dart';
 import 'navigation.dart';
 import './components/tag_text_field.dart';
@@ -9,11 +8,14 @@ import 'image_input.dart';
 class ProductLaunch extends StatefulWidget {
   final File? capturedImage;
   final String? id;
-  const ProductLaunch({super.key, this.capturedImage,  this.id});
+  final String? itemName;
+  final List? tags;
+  const ProductLaunch(
+      {super.key, this.capturedImage, this.id, this.itemName, this.tags});
 
   @override
   State<ProductLaunch> createState() {
-    return _ProductLaunchState(); 
+    return _ProductLaunchState();
   }
 }
 
@@ -26,14 +28,16 @@ class _ProductLaunchState extends State<ProductLaunch> {
   final tag5Controller = TextEditingController();
 
   //List<String> tags = [];
-  
 
   @override
   void initState() {
+    //MongoDatabase.changeStreamOG();
+    //MongoDatabase.changeStreamForSpecificId('1');
+
     if (widget.capturedImage != null) {
       _productImage = widget.capturedImage!;
     }
-    if(widget.id != null) {
+    if (widget.id != null) {
       id = widget.id!;
     }
     super.initState();
@@ -52,13 +56,37 @@ class _ProductLaunchState extends State<ProductLaunch> {
 
   File? _productImage;
   String? id;
+  
 
   @override
   Widget build(BuildContext context) {
+    if (widget.tags != null && widget.tags!.isNotEmpty && widget.tags![0] != null) {
+    tag1Controller.text = widget.tags![0]!;
+  } else {
     tag1Controller.text = 'Black';
-    tag2Controller.text = 'Exercise';
-    tag3Controller.text = 'Plastic';
-    tag4Controller.text = 'WatterBottle';
+  }
+
+    if (widget.tags != null && widget.tags!.isNotEmpty && widget.tags![1] != null) {
+      tag2Controller.text = widget.tags![1];
+    } else {
+      tag2Controller.text = 'Exercise';
+    }
+    if (widget.tags != null && widget.tags!.isNotEmpty && widget.tags![2] != null) {
+      tag3Controller.text = widget.tags![2];
+    } else {
+      tag3Controller.text = 'Plastic';
+    }
+    if (widget.tags != null && widget.tags!.isNotEmpty && widget.tags![3] != null) {
+      tag4Controller.text = widget.tags![3];
+    } else {
+      tag4Controller.text = 'WatterBottle';
+    }
+
+    // tag1Controller.text = 'Black';
+    // tag2Controller.text = 'Exercise';
+    // tag3Controller.text = 'Plastic';
+    // tag4Controller.text = 'WatterBottle';
+
     // tags = [
     //   tag1Controller.text,
     //   tag2Controller.text,
@@ -101,7 +129,8 @@ class _ProductLaunchState extends State<ProductLaunch> {
                     ),
                     const SizedBox(height: 6),
                     TextField(
-                      controller: nameController..text = "Water Bottle",
+                      controller: nameController
+                        ..text = widget.itemName ?? "Water Bottle",
                       keyboardType: TextInputType.text,
                       autofocus: true,
                       decoration: InputDecoration(
@@ -157,14 +186,14 @@ class _ProductLaunchState extends State<ProductLaunch> {
                     children: [
                       _productImage != null
                           ? ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(12),
                               child: Image.file(
                                 _productImage!,
                                 width: 300,
                               ),
                             )
                           : ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(12),
                               child: Image.asset(
                                 'assets/images/glass.png',
                                 width: 300,
@@ -177,14 +206,14 @@ class _ProductLaunchState extends State<ProductLaunch> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ImageInput(
-                                onPictureTaken: (image) {
-                                  Navigator.pop(
-                                      context); // Close ImageInput after taking photo
-                                  setState(() {
-                                    _productImage = image;
-                                  });
-                                },onInsertId: (id) {}
-                              ),
+                                  onPictureTaken: (image) {
+                                    Navigator.pop(
+                                        context); // Close ImageInput after taking photo
+                                    setState(() {
+                                      _productImage = image;
+                                    });
+                                  },
+                                  onInsertId: (id) {}),
                             ),
                           );
                         },
@@ -211,17 +240,17 @@ class _ProductLaunchState extends State<ProductLaunch> {
                       tag5Controller.text
                     ]);
                     Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Navigation()));
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Navigation()));
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                       vertical: 10,
-                      horizontal: 40,
+                      horizontal: 135,
                     ),
-                    backgroundColor: const Color.fromRGBO(7, 69, 60, 1),
-                    foregroundColor: Colors.white,
+                    backgroundColor: const Color.fromARGB(255, 196, 194, 178),
+                    foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(40),
                     ),
@@ -246,8 +275,11 @@ class _ProductLaunchState extends State<ProductLaunch> {
     //var _id = M.ObjectId(); //use for unique ID
     //final data = MongoDbModel(id:id, owner: owner, name: name, tag: tag, image: []);
     var result = await MongoDatabase.update(id, name, tags);
+    if (result == null) {
+      print('上架成功');
+    }
     print('id: $id');
-    print('result底加: $result');
+    //print('result: $result');
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         duration: Duration(seconds: 3),

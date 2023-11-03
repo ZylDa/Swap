@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:bson/bson.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +5,6 @@ import 'package:swap/mongodb/database_helper.dart';
 import 'package:swap/navigation.dart';
 import 'package:swap/screens/exchange_request_page.dart';
 import 'package:swap/screens/splash/splash_screen.dart';
-import 'package:swap/screens/success_page.dart';
 import 'package:swap/size_config.dart';
 import 'package:swap/components/loading.dart';
 import 'package:swap/mongo_auth/login_page.dart';
@@ -117,40 +114,8 @@ class _PersonalPageState extends State<PersonalPage> {
             },
           ),
         ),
-        /*測試用
-        PopupMenuItem(
-          child: ListTile(
-            leading: const Icon(Icons.check),
-            title: const Text('成功頁'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SuccessPage(),
-                ),
-              );
-            },
-          ),
-        ),
-        */
       ],
     );
-  }
-
-  Future<BsonBinary> gifToBsonBinary() async {
-    // 加载 GIF 文件
-    ByteData data =
-        await rootBundle.load('assets/images/Double Ring-1s-128px.gif');
-
-    // 转换为 Uint8List
-    Uint8List gifBytes = data.buffer.asUint8List();
-
-    // 创建 BsonBinary 对象
-    BsonBinary loadingBsonBinary = BsonBinary.from(
-      gifBytes,
-    );
-
-    return loadingBsonBinary;
   }
 
   @override
@@ -271,9 +236,10 @@ class _PersonalPageState extends State<PersonalPage> {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
-                            children: myItemNames.map((itemName) {
-                              BsonBinary bsonBinary =
-                                  myItemImages[myItemNames.indexOf(itemName)];
+                            children: myItemNames.asMap().entries.map((entry) {
+                              int index = entry.key;
+                              String itemName = entry.value;
+                              BsonBinary bsonBinary = myItemImages[index];
 
                               Uint8List imageBytes =
                                   Uint8List.fromList(bsonBinary.byteList);

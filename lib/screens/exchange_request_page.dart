@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swap/screens/success_page.dart';
 import 'package:swap/size_config.dart';
 import 'package:swap/widgets/build_request_card.dart';
 
@@ -96,7 +97,14 @@ class ExchangeRequestPage extends StatelessWidget {
                                 itemName: 'itemName$index',
                                 ownerName: 'ownerName$index',
                                 expirationDate: 'date$index',
-                                onAccept: () {},
+                                onAccept: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const SuccessPage(),
+                                    ),
+                                  );
+                                },
                                 onReject: () {},
                               );
                             },

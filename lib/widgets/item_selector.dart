@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:bson/bson.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:swap/components/loading.dart';
 import 'package:swap/mongodb/database_helper.dart';
 import 'package:swap/navigation.dart';
 import 'package:swap/size_config.dart';
@@ -26,6 +27,7 @@ class ItemSelectorState extends State<ItemSelector> {
   void initState() {
     super.initState();
     // 在初始化时从数据库获取物品名称、图片、品牌名和颜色
+    myItemImages = List.generate(3, (index) => loadingBinary);
     fetchItemImage();
   }
 

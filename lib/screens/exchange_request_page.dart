@@ -88,6 +88,7 @@ class ExchangeRequestPage extends StatelessWidget {
                           const SizedBox(
                             height: 100,
                           ),
+                          /*
                           ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: 3,
@@ -96,7 +97,9 @@ class ExchangeRequestPage extends StatelessWidget {
                               return RequestCard(
                                 itemName: 'itemName$index',
                                 ownerName: 'ownerName$index',
-                                expirationDate: 'date$index',
+                                expirationDate: '$index',
+                                imageProvider:
+                                    const AssetImage('assets/images/dog.jpeg'),
                                 onAccept: () {
                                   Navigator.push(
                                     context,
@@ -109,6 +112,56 @@ class ExchangeRequestPage extends StatelessWidget {
                               );
                             },
                           ),
+                          */
+                          //demo用
+                          const VerticalSpacing(
+                            of: 40,
+                          ),
+                          RequestCard(
+                              ownerName: 'demo1@xxxx.edu.tw',
+                              itemName: 'mouse',
+                              expirationDate: '4',
+                              imageProvider:
+                                  const AssetImage('assets/images/mouse.jpg'),
+                              onAccept: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SuccessPage(),
+                                  ),
+                                );
+                              },
+                              onReject: () {}),
+                          RequestCard(
+                              ownerName: 'demo2@xxxx.edu.tw',
+                              itemName: 'teddy bear',
+                              expirationDate: '2',
+                              imageProvider: const AssetImage(
+                                  'assets/images/teddybear.jpg'),
+                              onAccept: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SuccessPage(),
+                                  ),
+                                );
+                              },
+                              onReject: () {}),
+                          RequestCard(
+                              ownerName: 'demo3@xxxx.edu.tw',
+                              itemName: 'backpack',
+                              expirationDate: '5',
+                              imageProvider: const AssetImage(
+                                  'assets/images/backpack.jpg'),
+                              onAccept: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SuccessPage(),
+                                  ),
+                                );
+                              },
+                              onReject: () {}),
                         ],
                       ),
                     ),

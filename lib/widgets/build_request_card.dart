@@ -5,6 +5,7 @@ class RequestCard extends StatelessWidget {
   final String ownerName;
   final String itemName;
   final String expirationDate;
+  final ImageProvider imageProvider;
   final VoidCallback onAccept;
   final VoidCallback onReject;
 
@@ -12,6 +13,7 @@ class RequestCard extends StatelessWidget {
     required this.ownerName,
     required this.itemName,
     required this.expirationDate,
+    required this.imageProvider,
     required this.onAccept,
     required this.onReject,
   });
@@ -21,13 +23,13 @@ class RequestCard extends StatelessWidget {
     SizeConfig().init(context); // 確保初始化
 
     double imageWidth = getProportionateScreenWidth(105);
-    double imageHeight = getProportionateScreenHeight(105);
+    double imageHeight = getProportionateScreenHeight(105 + 5);
     // 計算相對位置 (40是自己調的)
-    double cardWidth = getProportionateScreenWidth(317);
-    double cardHeight = getProportionateScreenHeight(105);
+    double cardWidth = getProportionateScreenWidth(317 + 20);
+    double cardHeight = getProportionateScreenHeight(105 + 5);
 
-    double buttonWidth = getProportionateScreenWidth(57);
-    double buttonHeight = getProportionateScreenHeight(29);
+    double buttonWidth = getProportionateScreenWidth(57 + 7);
+    double buttonHeight = getProportionateScreenHeight(29 + 5);
 
     return Container(
       width: cardWidth,
@@ -50,13 +52,13 @@ class RequestCard extends StatelessWidget {
           Container(
             width: imageWidth,
             height: imageHeight,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20),
                 bottomLeft: Radius.circular(20),
               ),
               image: DecorationImage(
-                image: AssetImage('assets/images/corgi.jpg'), // 用你的實際圖片替換
+                image: imageProvider, // 用你的實際圖片替換
                 fit: BoxFit.cover,
               ),
             ),
@@ -72,8 +74,8 @@ class RequestCard extends StatelessWidget {
                   ownerName,
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 14,
-                    //fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
                     decoration: TextDecoration.none,
                   ),
                 ),
@@ -82,16 +84,16 @@ class RequestCard extends StatelessWidget {
                   itemName,
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 14,
+                    fontSize: 12,
                     decoration: TextDecoration.none,
-                    //fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  'Expiration: $expirationDate',
+                  'Expires in $expirationDate\d',
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 10,
                     color: Colors.grey,
                     decoration: TextDecoration.none,
                   ),

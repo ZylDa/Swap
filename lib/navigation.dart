@@ -70,17 +70,18 @@ class _NavigationState extends State<Navigation> {
       ),
       body: <Widget>[
         const ExchangeScreen(),
-        ProductLaunch(capturedImage: _capturedImage, id: _id),
+        
+        //ProductLaunch(capturedImage: _capturedImage, id: _id),
         //Container(
         //  color: const Color.fromRGBO(12, 59, 46, 1),
         //  alignment: Alignment.center,
         //  child: ImageInput(),
         //),
-        //Container(
-        //  color: const Color.fromARGB(255, 196, 194, 178),
-        //  alignment: Alignment.center,
-        //  child: const Text('user'),
-        //),
+        Container(
+         color: const Color.fromARGB(255, 0, 0, 0),
+         alignment: Alignment.center,
+         //child: const Text('user'),
+        ),
         const PersonalPage(),
       ][currentPageIndex],
     );

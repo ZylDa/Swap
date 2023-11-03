@@ -76,11 +76,7 @@ class _ProductLaunchState extends State<ProductLaunch> {
     } else {
       tag3Controller.text = 'Plastic';
     }
-    if (widget.tags != null && widget.tags!.isNotEmpty && widget.tags![3] != null) {
-      tag4Controller.text = widget.tags![3];
-    } else {
-      tag4Controller.text = 'WatterBottle';
-    }
+    
 
     // tag1Controller.text = 'Black';
     // tag2Controller.text = 'Exercise';

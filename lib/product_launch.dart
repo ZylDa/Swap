@@ -232,8 +232,8 @@ class _ProductLaunchState extends State<ProductLaunch> {
                       tag1Controller.text,
                       tag2Controller.text,
                       tag3Controller.text,
-                      tag4Controller.text,
-                      tag5Controller.text
+                      // tag4Controller.text,
+                      // tag5Controller.text
                     ]);
                     Navigator.push(
                         context,

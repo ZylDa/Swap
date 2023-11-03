@@ -8,7 +8,6 @@ import 'mongodb/mongodb_model.dart';
 import 'package:mongo_dart/mongo_dart.dart' hide Center, State;
 import 'package:uuid/uuid.dart';
 
-
 class ImageInput extends StatefulWidget {
   final Function(File) onPictureTaken;
   final Function(String id) onInsertId;
@@ -38,19 +37,26 @@ class _ImageInputState extends State<ImageInput> {
     final imagePicker = ImagePicker();
     final pickedImage =
         await imagePicker.pickImage(source: ImageSource.camera, maxWidth: 600);
+
     if (pickedImage == null) {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => const Navigation(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return child; //沒有任何滑動
+          },
+        ),
+      );
       return;
     }
     setState(() {
       _selectedImage = File(pickedImage.path);
     });
 
-     _insertImg();
+    _insertImg();
 
-    if (widget.onPictureTaken != null) {
-      widget.onPictureTaken(_selectedImage!);
-      //Navigator.pop(context); // Navigate back to previous screen after taking the photo
-    }
+    widget.onPictureTaken(_selectedImage!);
     //Navigator.pop(context, _selectedImage);
   }
 
@@ -60,13 +66,17 @@ class _ImageInputState extends State<ImageInput> {
     }
     String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
     final bytes = await _selectedImage!.readAsBytes();
-    //final base64Image = base64Encode(bytes);   
+    //final base64Image = base64Encode(bytes);
     Uint8List binaryImageData = Uint8List.fromList(bytes);
     final bsonBinary = BsonBinary.from(binaryImageData);
 
     final uuid = const Uuid().v4(); // 生成一個新的UUID
     final data = MongoDbModel(
-        id: uuid, owner: currentUserEmail, name: "", tag: [], binary: bsonBinary);
+        id: uuid,
+        owner: currentUserEmail,
+        name: "",
+        tag: [],
+        binary: bsonBinary);
     var result = await MongoDatabase.insert(data);
     print('insert result:  $result');
     widget.onInsertId(uuid);
@@ -76,26 +86,33 @@ class _ImageInputState extends State<ImageInput> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-        ),
-      ),
-      height: 350,
+      height: double.infinity,
       width: double.infinity,
       alignment: Alignment.center,
-      child: _selectedImage != null
-          ? GestureDetector(
-              onTap: _takePicture,
-              child: Image.file(
-                _selectedImage!,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              ),
-            )
-          : const CircularProgressIndicator(), // Show a loading indicator while capturing the image
+      child: Stack(
+        children: <Widget>[
+          // 首先添加图片
+          if (_selectedImage != null)
+            Image.file(
+              _selectedImage!,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+          // 然后添加完全不透明的灰色遮罩
+          if (_selectedImage != null)
+            Container(
+              color: Colors.black.withOpacity(0.7), // 半透明灰色遮罩
+              width: double.infinity,
+              height: double.infinity,
+            ),
+          // 最后添加加载指示器
+          if (_selectedImage != null)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
+      ),
     );
   }
 }

@@ -42,7 +42,8 @@ class _ImageInputState extends State<ImageInput> {
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => const Navigation(),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const Navigation(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return child; //沒有任何滑動
           },
@@ -64,7 +65,7 @@ class _ImageInputState extends State<ImageInput> {
     if (_selectedImage == null) {
       return;
     }
-    String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
+    final String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
     final bytes = await _selectedImage!.readAsBytes();
     //final base64Image = base64Encode(bytes);
     Uint8List binaryImageData = Uint8List.fromList(bytes);
@@ -99,7 +100,7 @@ class _ImageInputState extends State<ImageInput> {
               width: double.infinity,
               height: double.infinity,
             ),
-          // 然后添加完全不透明的灰色遮罩
+          //然后添加完全不透明的灰色遮罩
           if (_selectedImage != null)
             Container(
               color: Colors.black.withOpacity(0.7), // 半透明灰色遮罩

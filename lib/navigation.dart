@@ -70,7 +70,7 @@ class _NavigationState extends State<Navigation> {
       ),
       body: <Widget>[
         const ExchangeScreen(),
-        
+
         //ProductLaunch(capturedImage: _capturedImage, id: _id),
         //Container(
         //  color: const Color.fromRGBO(12, 59, 46, 1),
@@ -78,9 +78,9 @@ class _NavigationState extends State<Navigation> {
         //  child: ImageInput(),
         //),
         Container(
-         color: const Color.fromARGB(255, 0, 0, 0),
-         alignment: Alignment.center,
-         //child: const Text('user'),
+          color: const Color.fromARGB(255, 0, 0, 0),
+          alignment: Alignment.center,
+          //child: const Text('user'),
         ),
         const PersonalPage(),
       ][currentPageIndex],
@@ -123,10 +123,11 @@ class _NavigationState extends State<Navigation> {
       context,
       MaterialPageRoute(
         builder: (context) => ProductLaunch(
-            capturedImage: _capturedImage,
-            id: _id,
-            itemName: map['name'],
-            tags: map['tags']),
+          capturedImage: _capturedImage,
+          id: _id,
+          itemName: map['name'],
+          tags: map['tags'],
+        ),
       ),
     );
   }

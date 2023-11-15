@@ -66,7 +66,11 @@ class _RegisterPageState extends State<RegisterPage> {
     if (isValid == true) {
       if (password == cpassword) {
         try {
-          await users.insert({'email': mail, 'password': password});
+          await users.insert({
+            'email': mail,
+            'password': password,
+            'product_id': [],
+          });
           await db.close();
           saveUserEmail(mail);
           Navigator.pop(context);

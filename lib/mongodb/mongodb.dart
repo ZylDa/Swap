@@ -16,7 +16,6 @@ class MongoDatabase {
     //await collection.insertOne({'name': 'John', 'email': '123@qwe.com', 'password': 'john123'});
   }
 
-
   static Future<dynamic> insert(MongoDbModel data) async {
     final db = await Db.create(MONGO_URL_HUA);
     await db.open();
@@ -32,14 +31,21 @@ class MongoDatabase {
   }
 
   static Future<dynamic> update(
-      String id, String name, List<String> tags) async {
+      String id, String name, List<String> tags, String userEmail) async {
     //await connect();
     final db = await Db.create(MONGO_URL_HUA);
     await db.open();
     final collection = db.collection(COLLECTION_NAME_HUA);
+    final userCollection = db.collection(COLLECTION_NAME_USER);
     try {
       await collection.update(
-          where.eq('_id', id), modify.set('物品名稱', name).set('tags', tags));
+        where.eq('_id', id),
+        modify.set('物品名稱', name).set('tags', tags),
+      );
+      await userCollection.update(
+        where.eq('email', userEmail),
+        modify.push('product_id', id),
+      );
       await db.close();
     } catch (e) {
       print(e.toString());
@@ -51,7 +57,7 @@ class MongoDatabase {
     final db = await Db.create(MONGO_URL_HUA);
     await db.open();
     final collection = db.collection(COLLECTION_NAME_HUA);
-    
+
     var stream = collection.watch(
       <Map<String, Object>>[
         {
@@ -66,7 +72,7 @@ class MongoDatabase {
       ),
     );
 
-    var controller = stream.listen((changeEvent) async{
+    var controller = stream.listen((changeEvent) async {
       String name = changeEvent.fullDocument?['物品名稱'];
       List tags = changeEvent.fullDocument?['tags'];
       String operationType = changeEvent.operationType ?? '';

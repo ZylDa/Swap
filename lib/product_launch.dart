@@ -10,8 +10,13 @@ class ProductLaunch extends StatefulWidget {
   final String? id;
   final String? itemName;
   final List? tags;
-  const ProductLaunch(
-      {super.key, this.capturedImage, this.id, this.itemName, this.tags});
+  const ProductLaunch({
+    super.key,
+    this.capturedImage,
+    this.id,
+    this.itemName,
+    this.tags,
+  });
 
   @override
   State<ProductLaunch> createState() {
@@ -56,27 +61,31 @@ class _ProductLaunchState extends State<ProductLaunch> {
 
   File? _productImage;
   String? id;
-  
 
   @override
   Widget build(BuildContext context) {
-    if (widget.tags != null && widget.tags!.isNotEmpty && widget.tags![0] != null) {
-    tag1Controller.text = widget.tags![0]!;
-  } else {
-    tag1Controller.text = 'Black';
-  }
+    if (widget.tags != null &&
+        widget.tags!.isNotEmpty &&
+        widget.tags![0] != null) {
+      tag1Controller.text = widget.tags![0]!;
+    } else {
+      tag1Controller.text = 'Black';
+    }
 
-    if (widget.tags != null && widget.tags!.isNotEmpty && widget.tags![1] != null) {
+    if (widget.tags != null &&
+        widget.tags!.isNotEmpty &&
+        widget.tags![1] != null) {
       tag2Controller.text = widget.tags![1];
     } else {
       tag2Controller.text = 'Exercise';
     }
-    if (widget.tags != null && widget.tags!.isNotEmpty && widget.tags![2] != null) {
+    if (widget.tags != null &&
+        widget.tags!.isNotEmpty &&
+        widget.tags![2] != null) {
       tag3Controller.text = widget.tags![2];
     } else {
       tag3Controller.text = 'Plastic';
     }
-    
 
     // tag1Controller.text = 'Black';
     // tag2Controller.text = 'Exercise';
@@ -268,9 +277,8 @@ class _ProductLaunchState extends State<ProductLaunch> {
   }
 
   Future<void> _updateData(String id, String name, List<String> tags) async {
-    //var _id = M.ObjectId(); //use for unique ID
-    //final data = MongoDbModel(id:id, owner: owner, name: name, tag: tag, image: []);
-    var result = await MongoDatabase.update(id, name, tags);
+    final String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
+    var result = await MongoDatabase.update(id, name, tags, currentUserEmail);
     if (result == null) {
       print('上架成功');
     }

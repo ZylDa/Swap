@@ -18,7 +18,7 @@ class BodyState extends State<Body> {
   List<Map<String, String>> splashData = [
     {
       "text":
-          "Welcome to Swap, let us guide you through! Click a item above to exchange with.",
+          "Welcome to Swap, let us guide you through! Click a item to exchange with.",
       "image": "assets/images/onboard_1n.png",
     },
     {

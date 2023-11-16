@@ -51,7 +51,7 @@ class DatabaseHelper {
     return items.map((item) => item['owner'] as String).toList();
   }
 
-  //抓取符合owner資料的物品
+  //抓取符合owner資料的物品圖片
   Future<List<BsonBinary>> fetchItemImageByOwner(String ownerEmail) async {
     final db = await Db.create(
         'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');

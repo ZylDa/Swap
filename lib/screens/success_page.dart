@@ -92,7 +92,7 @@ class SuccessPage extends StatelessWidget {
                             width: rowSizedBoxWidth2,
                           ),
                           const Text(
-                            'demo1',
+                            '小謙',
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'basic',
@@ -122,7 +122,7 @@ class SuccessPage extends StatelessWidget {
                             width: rowSizedBoxWidth2,
                           ),
                           const Text(
-                            'demo1@xxxx.edu.tw',
+                            '109306088@nccu.edu.tw',
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'basic',

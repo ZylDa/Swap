@@ -37,7 +37,9 @@ class ItemSelectorState extends State<ItemSelector> {
     final dbHelper = DatabaseHelper();
     List<BsonBinary> images =
         await DatabaseHelper().fetchItemImageByOwner(currentUserEmail);
-    List<String> itemIds = await dbHelper.fetchItemIdsByOwner(currentUserEmail);
+    List<String> itemIds = await dbHelper.fetchItemIdsByOwner(
+      currentUserEmail,
+    );
 
     if (mounted) {
       setState(() {
@@ -93,7 +95,7 @@ class ItemSelectorState extends State<ItemSelector> {
 
   @override
   Widget build(BuildContext context) {
-    if (getUserEmail() != null) {
+    if (myItemImages.isNotEmpty) {
       return SizedBox(
         width: SizeConfig.screenWidth,
         height: 85,
@@ -122,7 +124,7 @@ class ItemSelectorState extends State<ItemSelector> {
     } else {
       return SizedBox(
         width: SizeConfig.screenWidth,
-        height: 85,
+        height: 75,
         child: const Column(
           children: [
             Text(
@@ -133,8 +135,19 @@ class ItemSelectorState extends State<ItemSelector> {
                 fontFamily: 'basic',
               ),
             ),
+            SizedBox(
+              height: 5,
+            ),
             Text(
-              'Add items that you don\'t need then exchange with others!',
+              'Add items that you don\'t need,',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+                fontFamily: 'basic',
+              ),
+            ),
+            Text(
+              'then exchange with others!',
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 14,

@@ -73,23 +73,24 @@ class _RegisterPageState extends State<RegisterPage> {
           });
           await db.close();
           saveUserEmail(mail);
-          Navigator.pop(context);
+          Navigator.of(context, rootNavigator: true).pop();
+
           return true; // 注册成功，返回 true
         } catch (e) {
           await db.close();
-          Navigator.pop(context);
+          Navigator.of(context, rootNavigator: true).pop();
           showErrorMessage('Failed to register');
           return false; // 注册失败，返回 false
         }
       } else {
         await db.close();
-        Navigator.pop(context);
+        Navigator.of(context, rootNavigator: true).pop();
         showErrorMessage('Mismatch password');
         return false; // 密码不匹配，返回 false
       }
     } else {
       await db.close();
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
       showErrorMessage('Wrong email format');
       return false; // 邮箱格式不正确，返回 false
     }

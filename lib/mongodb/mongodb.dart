@@ -36,16 +36,16 @@ class MongoDatabase {
     final db = await Db.create(MONGO_URL_HUA);
     await db.open();
     final collection = db.collection(COLLECTION_NAME_HUA);
-    final userCollection = db.collection(COLLECTION_NAME_USER);
+    //final userCollection = db.collection(COLLECTION_NAME_USER);
     try {
       await collection.update(
         where.eq('_id', id),
         modify.set('物品名稱', name).set('tags', tags),
       );
-      await userCollection.update(
-        where.eq('email', userEmail),
-        modify.push('product_id', id),
-      );
+      // await userCollection.update(
+      //   where.eq('email', userEmail),
+      //   modify.push('product_id', id),
+      // );
       await db.close();
     } catch (e) {
       print(e.toString());

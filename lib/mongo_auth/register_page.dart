@@ -69,7 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
           await users.insert({
             'email': mail,
             'password': password,
-            'product_id': [],
+            //'product_id': [],
           });
           await db.close();
           saveUserEmail(mail);

@@ -69,7 +69,7 @@ class _ProductLaunchState extends State<ProductLaunch> {
         widget.tags![0] != null) {
       tag1Controller.text = widget.tags![0]!;
     } else {
-      tag1Controller.text = 'Black';
+      tag1Controller.text = 'Brown';
     }
 
     if (widget.tags != null &&
@@ -77,14 +77,14 @@ class _ProductLaunchState extends State<ProductLaunch> {
         widget.tags![1] != null) {
       tag2Controller.text = widget.tags![1];
     } else {
-      tag2Controller.text = 'Exercise';
+      tag2Controller.text = 'Orange';
     }
     if (widget.tags != null &&
         widget.tags!.isNotEmpty &&
         widget.tags![2] != null) {
       tag3Controller.text = widget.tags![2];
     } else {
-      tag3Controller.text = 'Plastic';
+      tag3Controller.text = 'New Balance';
     }
 
     // tag1Controller.text = 'Black';

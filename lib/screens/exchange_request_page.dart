@@ -118,7 +118,7 @@ class ExchangeRequestPage extends StatelessWidget {
                             of: 40,
                           ),
                           RequestCard(
-                              ownerName: '109306087@nccu.edu.tw',
+                              ownerName: '翠莎',
                               itemName: 'mouse',
                               expirationDate: '4',
                               imageProvider:
@@ -133,7 +133,7 @@ class ExchangeRequestPage extends StatelessWidget {
                               },
                               onReject: () {}),
                           RequestCard(
-                              ownerName: '109306045@nccu.edu.tw',
+                              ownerName: '花曼蒂',
                               itemName: 'teddy bear',
                               expirationDate: '2',
                               imageProvider: const AssetImage(
@@ -148,7 +148,7 @@ class ExchangeRequestPage extends StatelessWidget {
                               },
                               onReject: () {}),
                           RequestCard(
-                              ownerName: '109306088@nccu.edu.tw',
+                              ownerName: '小謙',
                               itemName: 'backpack',
                               expirationDate: '5',
                               imageProvider: const AssetImage(

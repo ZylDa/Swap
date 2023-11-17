@@ -118,7 +118,7 @@ class ExchangeRequestPage extends StatelessWidget {
                             of: 40,
                           ),
                           RequestCard(
-                              ownerName: '翠莎',
+                              ownerName: '小謙',
                               itemName: 'mouse',
                               expirationDate: '4',
                               imageProvider:

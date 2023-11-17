@@ -9,7 +9,8 @@ class RequestCard extends StatelessWidget {
   final VoidCallback onAccept;
   final VoidCallback onReject;
 
-  RequestCard({
+  const RequestCard({
+    super.key,
     required this.ownerName,
     required this.itemName,
     required this.expirationDate,
@@ -91,6 +92,7 @@ class RequestCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
+                  // ignore: unnecessary_string_escapes
                   'Expires in $expirationDate\d',
                   style: const TextStyle(
                     fontSize: 10,

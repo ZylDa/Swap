@@ -24,6 +24,8 @@ class _PersonalPageState extends State<PersonalPage> {
   List<BsonBinary> myItemImages = [];
   List<String> wishListNames = [];
   List<BsonBinary> wishListImages = [];
+  //userName讀取時的替代
+  String userName = 'welcome back!';
 
   @override
   void initState() {
@@ -38,11 +40,14 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 
   Future<void> fetchItemInfoPersonal() async {
-    // 获取当前用户的email
     String currentUserEmail = (await getUserEmail()) ?? ''; // 使用空字串作為默認值
     List<String> names = await DatabaseHelper().fetchItemNames();
     List<BsonBinary> images = await DatabaseHelper().fetchItemImages();
     List<String> owners = await DatabaseHelper().fetchItemOwner();
+
+    //轉換userName
+    DatabaseHelper dbHelper = DatabaseHelper();
+    userName = await dbHelper.findUserNameByOwner(currentUserEmail);
 
     // 過濾"我的物品"
     List<int> myItemIndices = List.generate(owners.length, (index) => index)
@@ -144,6 +149,17 @@ class _PersonalPageState extends State<PersonalPage> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    child: Text(
+                      'Hi, $userName',
+                      style: const TextStyle(
+                        color: Color(0xFF151515),
+                        fontSize: 16,
+                        fontFamily: 'Basic',
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 0.80,
+                      ),
+                    ),
+                    /*
                     child: FutureBuilder<String?>(
                       future: getUserEmail(),
                       builder: (context, snapshot) {
@@ -163,6 +179,7 @@ class _PersonalPageState extends State<PersonalPage> {
                         }
                       },
                     ),
+                    */
                   ),
                 ),
                 // Positioned(

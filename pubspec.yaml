@@ -74,9 +74,6 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-   - assets/images/onboard_test_1.jpg
-   - assets/images/onboard_test_2.jpg
-   - assets/images/onboard_test_3.jpg
    - assets/images/logopng.png
    - assets/images/doll.png
    - assets/images/curler.png

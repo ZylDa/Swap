@@ -21,6 +21,7 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
   List<String> othersItemNames = [];
   List<BsonBinary> othersItemImages = [];
   List<String> othersItemOwner = [];
+  List<String> othersItemUserName = [];
   List<List<String>> othersItemTags = [];
   List<Uint8List> othersItemImagesBytes = [];
 
@@ -36,6 +37,15 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
     List<BsonBinary> images = await DatabaseHelper().fetchItemImages();
     List<String> owners = await DatabaseHelper().fetchItemOwner();
     List<List<String>> tags = await DatabaseHelper().fetchItemTags();
+    List<String> userNames = [];
+
+    //for each ownerEmail, find the name of the owner and update the list
+    DatabaseHelper dbHelper = DatabaseHelper();
+    for (String owner in owners) {
+      String userName = await dbHelper.findUserNameByOwner(owner);
+      userNames.add(userName);
+      //print('Owner: $owner, UserName: $userName');
+    }
 
     List<int> othersItemIndices = List.generate(owners.length, (index) => index)
         .where((index) => owners[index] != currentUserEmail)
@@ -56,6 +66,8 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
             othersItemIndices.map((index) => imagesBytes[index]).toList();
         othersItemOwner =
             othersItemIndices.map((index) => owners[index]).toList();
+        othersItemUserName =
+            othersItemIndices.map((index) => userNames[index]).toList();
         othersItemTags = othersItemIndices.map((index) => tags[index]).toList();
       });
     }
@@ -117,11 +129,12 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                 String itemName = othersItemNames[index];
                 Uint8List imageBytes = othersItemImagesBytes[index];
                 String itemOwner = othersItemOwner[index];
+                String itemUserName = othersItemUserName[index];
                 List<String> tags = othersItemTags[index];
 
                 return BuildCard(
                   imageBytes: imageBytes,
-                  ownerName: itemOwner,
+                  ownerName: itemUserName,
                   itemName: itemName,
                   tags: tags,
                   onExchangePressed: () {
@@ -149,7 +162,9 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
     try {
       return Uint8List.fromList(imageBinary.byteList);
     } catch (error) {
-      print('Error decoding image: $error');
+      if (kDebugMode) {
+        print('Error decoding image: $error');
+      }
       return Uint8List(0); // 返回空的 Uint8List，以避免在图像无效时出现问题
     }
   }

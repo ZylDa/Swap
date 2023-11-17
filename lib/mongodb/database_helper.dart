@@ -62,6 +62,22 @@ class DatabaseHelper {
     return items.map((item) => _extractImageData(item)).toList();
   }
 
+  // 抓取符合 owner_email 的使用者名稱
+  Future<String> findUserNameByOwner(String ownerEmail) async {
+    final db = await Db.create(
+        'mongodb+srv://swap:swap@swap.2nka9hz.mongodb.net/huatest64?retryWrites=true&w=majority');
+    await db.open();
+    final collection = db.collection('users');
+
+    // 使用 findOne 方法查找符合条件的用户
+    final user = await collection.findOne({'email': ownerEmail});
+
+    await db.close();
+
+    // 如果找到用户，返回用户名；否则返回 null 或者一个默认值，具体取决于你的需求
+    return user != null ? user['name'] : 'No user name found';
+  }
+
   BsonBinary _extractImageData(Map<String, dynamic> item) {
     var binaryData = item['照片二進制'];
     return binaryData;

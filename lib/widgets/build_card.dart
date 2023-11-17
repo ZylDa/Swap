@@ -57,7 +57,7 @@ class BuildCard extends StatelessWidget {
             ),
             GestureDetector(
               onTap: onExchangePressed,
-              child: Container(
+              child: SizedBox(
                 width: 270,
                 height: 270,
                 child: image,

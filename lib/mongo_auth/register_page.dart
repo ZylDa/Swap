@@ -20,6 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final nameController = TextEditingController();
 
   // 显示加载指示器对话框
   void showLoadingDialog() {
@@ -35,7 +36,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   // sign user up method
-  Future<bool> register(String mail, String password, String cpassword) async {
+  Future<bool> register(
+      String mail, String password, String cpassword, String name) async {
     showLoadingDialog();
     //error message to user
     void showErrorMessage(String message) {
@@ -69,7 +71,8 @@ class _RegisterPageState extends State<RegisterPage> {
           await users.insert({
             'email': mail,
             'password': password,
-            'product_id': [],
+            //'product_id': [],
+            'name': name,
           });
           await db.close();
           saveUserEmail(mail);
@@ -117,13 +120,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 // logo
                 Image.asset(
                   'assets/images/logopng.png',
-                  height: 300,
-                  width: 300,
+                  height: 200,
+                  width: 200,
                   alignment: Alignment.center,
                   fit: BoxFit.cover,
                 ),
 
-                const SizedBox(height: 25),
+                const SizedBox(height: 35),
 
                 // Create an account for free!
                 Text(
@@ -135,6 +138,17 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
 
                 const SizedBox(height: 25),
+
+                // name textfield
+                MyTextField(
+                  controller: nameController,
+                  hintText: 'User Name',
+                  obscureText: false,
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
 
                 // email textfield
                 MyTextField(
@@ -168,9 +182,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     text: 'Sign up',
                     onTap: () async {
                       bool registerResult = await register(
-                          emailController.text,
-                          passwordController.text,
-                          confirmPasswordController.text);
+                        emailController.text,
+                        passwordController.text,
+                        confirmPasswordController.text,
+                        nameController.text,
+                      );
                       if (registerResult) {
                         Navigator.push(
                           context,

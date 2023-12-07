@@ -1,6 +1,6 @@
-# swap
+# Swap 一拍即合
 
-A new Flutter project.
+一款AI 圖像辨識二手交換APP.
 
 ## Getting Started
 

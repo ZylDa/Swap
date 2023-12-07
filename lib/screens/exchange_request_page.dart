@@ -58,7 +58,7 @@ class ExchangeRequestPage extends StatelessWidget {
                         fontSize: 24,
                         fontFamily: 'Basic',
                         fontWeight: FontWeight.w600,
-                        letterSpacing: 0.80,
+                        letterSpacing: 1.5,
                         decoration: TextDecoration.none,
                       ),
                     ),

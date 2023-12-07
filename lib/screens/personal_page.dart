@@ -5,6 +5,7 @@ import 'package:swap/mongodb/database_helper.dart';
 import 'package:swap/navigation.dart';
 import 'package:swap/screens/exchange_request_page.dart';
 import 'package:swap/screens/splash/splash_screen.dart';
+import 'package:swap/screens/wishlist_page.dart';
 import 'package:swap/size_config.dart';
 import 'package:swap/components/loading.dart';
 import 'package:swap/mongo_auth/login_page.dart';
@@ -90,7 +91,33 @@ class _PersonalPageState extends State<PersonalPage> {
             title: const Text('Contact Us'),
             onTap: () {
               // 在這裡執行聯絡我們的操作
-              Navigator.pop(context);
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Contact Us'),
+                    content: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('第8A組 Swap 一拍即合'),
+                        SizedBox(height: 5),
+                        Text('組員:黃筠茜、楊鵑慈、黃慧如、花巧臻、黃任謙'),
+                        // 其他聯絡資訊...
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context); // 關閉對話框
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+              Navigator.pop(context); // 關閉PopupMenuButton
             },
           ),
         ),
@@ -323,12 +350,19 @@ class _PersonalPageState extends State<PersonalPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ExchangeRequestPage(
+                                      builder: (context) => WishlistPage(
                                         itemName: itemName,
                                         decodedImage: Image.memory(
                                           imageBytes,
                                           fit: BoxFit.contain,
                                         ),
+                                        ownerName: '小慈',
+                                        tags: const [
+                                          'Brown',
+                                          'Orange',
+                                          'New Balance'
+                                        ],
+                                        requestTime: '2023/12/11',
                                       ),
                                     ),
                                   );

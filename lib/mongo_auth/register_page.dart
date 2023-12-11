@@ -119,9 +119,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // logo
                 Image.asset(
-                  'assets/images/logopng.png',
-                  height: 200,
-                  width: 200,
+                  'assets/images/new logo-removebg-preview.png',
+                  height: 150,
+                  width: 150,
                   alignment: Alignment.center,
                   fit: BoxFit.cover,
                 ),

@@ -119,7 +119,7 @@ class SuccessPage extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: rowSizedBoxWidth2,
+                            width: rowSizedBoxWidth2-2,
                           ),
                           const Text(
                             '109306088@nccu.edu.tw',

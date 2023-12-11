@@ -182,25 +182,25 @@ class _PersonalPageState extends State<PersonalPage> {
                     */
                   ),
                 ),
-                // Positioned(
-                //   top: 72,
-                //   right: 70,
-                //   child: IconButton(
-                //     iconSize: 35,
-                //     icon: const Icon(Icons.notifications),
-                //     color: Colors.black,
-                //     onPressed: () {
-                //       Navigator.push(
-                //         context,
-                //         MaterialPageRoute<void>(
-                //           builder: (BuildContext context) {
-                //             return NotificationWidget();
-                //           },
-                //         ),
-                //       );
-                //     },
-                //   ),
-                // ),
+                Positioned(
+                  top: 72,
+                  right: 70,
+                  child: IconButton(
+                    iconSize: 35,
+                    icon: const Icon(Icons.notifications),
+                    color: Colors.black,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) {
+                            return NotificationWidget();
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
                 Positioned(
                   top: 72,
                   right: 15,

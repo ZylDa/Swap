@@ -29,7 +29,7 @@ class RequestCard extends StatelessWidget {
     double cardWidth = getProportionateScreenWidth(317 + 20);
     double cardHeight = getProportionateScreenHeight(105 + 5);
 
-    double buttonWidth = getProportionateScreenWidth(57 + 7);
+    double buttonWidth = getProportionateScreenWidth(57 + 12);
     double buttonHeight = getProportionateScreenHeight(29 + 5);
 
     return Container(

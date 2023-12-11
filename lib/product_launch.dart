@@ -236,14 +236,28 @@ class _ProductLaunchState extends State<ProductLaunch> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    //tags.add(TagTextField.getTagController());
-                    _updateData(id!, nameController.text, [
-                      tag1Controller.text,
-                      tag2Controller.text,
-                      tag3Controller.text,
-                      // tag4Controller.text,
-                      // tag5Controller.text
-                    ]);
+                    List<String> updatedTags = [];
+                    // 檢查每個 tagController.text 是否為非空字符串，是的話才加入 array
+                    if (tag1Controller.text.trim().isNotEmpty) {
+                      updatedTags.add(tag1Controller.text.trim());
+                    }
+
+                    if (tag2Controller.text.trim().isNotEmpty) {
+                      updatedTags.add(tag2Controller.text.trim());
+                    }
+
+                    if (tag3Controller.text.trim().isNotEmpty) {
+                      updatedTags.add(tag3Controller.text.trim());
+                    }
+
+                    if (tag4Controller.text.trim().isNotEmpty) {
+                      updatedTags.add(tag4Controller.text.trim());
+                    }
+
+                    if (tag5Controller.text.trim().isNotEmpty) {
+                      updatedTags.add(tag5Controller.text.trim());
+                    }
+                    _updateData(id!, nameController.text, updatedTags);
                     Navigator.push(
                         context,
                         MaterialPageRoute(

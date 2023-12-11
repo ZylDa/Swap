@@ -96,6 +96,8 @@ flutter:
    - assets/images/mouse.jpg
    - assets/images/teddybear.jpg
    - assets/images/backpack.jpg
+   - assets/images/new logo-removebg-preview.png
+
 
 flutter_native_splash:
   color: "#EAE8DB"

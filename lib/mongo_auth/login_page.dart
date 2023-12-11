@@ -111,9 +111,9 @@ class _LoginPageState extends State<LoginPage> {
 
                 // logo
                 Image.asset(
-                  'assets/images/new logo-removebg-preview.png',
-                  height: 200,
-                  width: 200,
+                  'assets/images/logo_new.png',
+                  height: 300,
+                  width: 300,
                   alignment: Alignment.center,
                   fit: BoxFit.cover,
                 ),

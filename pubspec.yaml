@@ -75,6 +75,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
    - assets/images/logopng.png
+   - assets/images/logo_new.png
    - assets/images/doll.png
    - assets/images/curler.png
    - assets/images/glass.png

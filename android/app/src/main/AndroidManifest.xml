@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="一拍即合"
+        android:label="Swap"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/swap_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
